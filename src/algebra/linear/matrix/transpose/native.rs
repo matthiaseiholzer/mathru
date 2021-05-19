@@ -65,6 +65,10 @@ impl<T> Transpose for Matrix<T>
     {
         let gcdiv: usize = Matrix::<T>::gcd(self.m, self.n);
 
+        let temp_m: usize = self.m;
+        self.m = self.n;
+        self.n = temp_m;
+
         let a: usize = self.m / gcdiv;
         let b: usize = self.n / gcdiv;
 
@@ -115,10 +119,6 @@ impl<T> Transpose for Matrix<T>
                 *self.get_mut(i, j) = temp[i];
             }
         }
-
-        let temp_m: usize = self.m;
-        self.m = self.n;
-        self.n = temp_m;
 
         return self;
     }

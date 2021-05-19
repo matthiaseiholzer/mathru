@@ -1,4 +1,4 @@
-use super::{Field, Lattice, Scalar};
+use super::{Field, Scalar};
 use crate::elementary::{Exponential, Hyperbolic, Power, Trigonometry};
 
 macro_rules! impl_real
@@ -17,11 +17,6 @@ macro_rules! impl_real
 			fn floor(self: &Self) -> Self
 			{
 				(*self).floor()
-			}
-
-			fn epsilon() -> Self
-			{
-				std::$id::EPSILON
 			}
 
 			fn euler_gamma() -> Self
@@ -48,7 +43,7 @@ impl_real!(f32, f32; f64, f64);
 /// Real number
 ///
 ///<a href="https://en.wikipedia.org/wiki/Real_number">https://en.wikipedia.org/wiki/Real_number</a>
-pub trait Real: Field + Lattice + Scalar + Exponential + Trigonometry + Power + Hyperbolic
+pub trait Real: Field + Scalar + Exponential + Trigonometry + Power + Hyperbolic
 {
     /// Returns the smallest integer greater than or equal to a number.
     fn ceil(self: &Self) -> Self;
@@ -79,9 +74,6 @@ pub trait Real: Field + Lattice + Scalar + Exponential + Trigonometry + Power + 
             a
         }
     }
-
-    /// Machine epsilon
-    fn epsilon() -> Self;
 
     /// Euler–Mascheroni constant
     fn euler_gamma() -> Self;

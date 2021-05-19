@@ -1,4 +1,3 @@
-use crate::algebra::abstr::{Field, Scalar};
 use std::slice::IterMut;
 
 pub struct MatrixIteratorMut<'a, T>
@@ -13,7 +12,7 @@ impl<'a, T> MatrixIteratorMut<'a, T>
         MatrixIteratorMut{ iter }
     }
 }
-impl<'a, T> Iterator for MatrixIteratorMut<'a, T> where T: Field + Scalar
+impl<'a, T> Iterator for MatrixIteratorMut<'a, T>
 {
     type Item = &'a mut T;
 

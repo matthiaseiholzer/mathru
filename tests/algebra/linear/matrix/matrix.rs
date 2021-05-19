@@ -1,5 +1,6 @@
 use crate::mathru::algebra::linear::matrix::Substitute;
 use mathru::algebra::linear::{matrix::{Transpose, Solve}, Matrix, Vector};
+use mathru::algebra::abstr::Complex;
 
 
 #[test]
@@ -247,6 +248,8 @@ fn transpose_4()
 
     let uut_t: Matrix<f32> = uut.transpose();
 
+    println!("{}", uut_t);
+
     let uut_t_ref: Matrix<f32> =
         Matrix::new(2, 4, vec![1.0, 0.0, 3.0, 0.0, 1.0, -7.0, 0.5, 0.25]);
 
@@ -283,6 +286,23 @@ fn transpose_6()
     let uut_t: Matrix<f32> = uut.transpose();
 
     let uut_t_ref: Matrix<f32> = Matrix::new(1, 4, vec![1.0, 3.0, 1.0, 0.5]);
+
+    assert_relative_eq!(uut_t_ref, uut_t);
+}
+
+#[test]
+fn transpose_7()
+{
+    let uut: Matrix<Complex<f32>> = matrix![ Complex::new(1.0, 0.0);
+                                    Complex::new(13.0, 0.0);
+                                    Complex::new(11.0, 0.0);
+                                    Complex::new(10.5, 0.0)];
+
+    let uut_t: Matrix<Complex<f32>> = uut.transpose();
+
+    let uut_t_ref: Matrix<Complex<f32>> = Matrix::new(1, 4, vec![Complex::new(1.0, 0.0), Complex::new(13.0, 0.0),
+                                    Complex::new(11.0, 0.0),
+                                    Complex::new(10.5, 0.0)]);
 
     assert_relative_eq!(uut_t_ref, uut_t);
 }

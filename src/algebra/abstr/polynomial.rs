@@ -1,12 +1,11 @@
 //! Polynomial
 use std::fmt::{Result, Formatter, Display};
-use crate::algebra::abstr::{Real, AbsDiffEq, Monoid, Semigroup, SemigroupAdd, Quasigroup};
+use crate::algebra::abstr::{Real, AbsDiffEq, Monoid, Semigroup, SemigroupAdd, Quasigroup, RelativeEq};
 use crate::algebra::{
     abstr::{Field, Scalar},
 };
 use std::ops::{Add, Mul, Div, Sub, Neg, AddAssign, MulAssign, SubAssign};
 use crate::algebra::abstr::Zero;
-use crate::abs_diff_eq;
 use crate::algebra::abstr::magma::{MagmaAdd, MagmaMul, Magma};
 use crate::algebra::abstr::monoid::{MonoidAdd};
 use crate::algebra::abstr::identity::{Identity};
@@ -585,7 +584,7 @@ impl<T> Polynomial<T>
         for i in (1..len).rev()
         {
             let v = &coef[i];
-            if abs_diff_eq!(*v, T::zero())
+            if v.abs_diff_eq(&T::zero(), T::default_epsilon())
             {
                 coef.pop();
             }
@@ -676,22 +675,6 @@ impl<T> Polynomial<T>
     }
 }
 
-impl<T> AbsDiffEq for Polynomial<T>
-    where T: AbsDiffEq<Epsilon = T>
-{
-    type Epsilon = T;
-
-    fn default_epsilon() -> T
-    {
-        T::default_epsilon()
-    }
-
-    fn abs_diff_eq(&self, _other: &Polynomial<T>, _epsilon: T) -> bool
-    {
-       unimplemented!();
-    }
-}
-
 impl<T> Magma<Addition> for Polynomial<T>
     where T: MagmaAdd + Magma<Addition> + Scalar + AbsDiffEq<Epsilon = T>
 {
@@ -775,4 +758,48 @@ impl<T> GroupAdd for Polynomial<T>
     where T: GroupAdd + Group<Addition> + Loop<Addition> + Quasigroup<Addition> + Scalar + MagmaAdd + AbsDiffEq<Epsilon = T> + MonoidAdd
 {
 
+}
+
+impl<T> AbsDiffEq for Polynomial<T>
+    where T: AbsDiffEq<Epsilon = T> + Clone
+{
+    type Epsilon = T;
+
+    fn default_epsilon() -> T
+    {
+        T::default_epsilon()
+    }
+
+    fn abs_diff_eq(&self, other: &Polynomial<T>, epsilon: T) -> bool
+    {
+        for (a, b) in self.coef.iter().zip(other.coef.iter())
+        {
+            if a.abs_diff_ne(b, epsilon.clone())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+impl<T> RelativeEq for Polynomial<T>
+    where T: RelativeEq<Epsilon = T> + Clone
+{
+    fn default_max_relative() -> T
+    {
+        T::default_max_relative()
+    }
+
+    fn relative_eq(&self, other: &Self, epsilon: T, max_relative: T) -> bool
+    {
+        for (a, b) in self.coef.iter().zip(other.coef.iter())
+        {
+            if a.relative_ne(b, epsilon.clone(), max_relative.clone())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

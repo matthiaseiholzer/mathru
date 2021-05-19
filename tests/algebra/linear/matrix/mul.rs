@@ -1,5 +1,6 @@
 
 use mathru::algebra::linear::{Matrix, Vector};
+use mathru::algebra::abstr::Complex;
 
 #[test]
 fn mul_1()
@@ -83,6 +84,22 @@ fn mul_6()
     let res: Matrix<f64> = &a * &b;
 
     assert_relative_eq!(reference, res, epsilon=0.00001, max_relative=1.0e-10);
+}
+
+#[test]
+fn mul_7()
+{
+    let a: Matrix<Complex<f32>> = matrix![   Complex::new(1.0, 1.0), Complex::new(-2.0, 2.0) ;
+                                    Complex::new(-4.0, 3.0), Complex::new(1.0, -5.0)];
+
+    let b: Matrix<Complex<f32>> = matrix![   Complex::new(-2.0, 3.0), Complex::new(-7.0, 5.0);
+                                    Complex::new(-5.0, 2.0), Complex::new(-1.0, -4.0)];
+
+    let mul_ref: Matrix<Complex<f32>> = matrix![Complex::new(1.0, -13.0), Complex::new(-2.0, 4.0);
+                                        Complex::new(4.0, 9.0), Complex::new(-8.0, -40.0)];
+
+
+    assert_relative_eq!(mul_ref, &a * &b);
 }
 
 #[test]

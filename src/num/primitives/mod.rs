@@ -1,11 +1,10 @@
+use std::{f32, f64, i128, i16, i32, i64, i8, u128, u16, u32, u64, u8};
+
 use crate::{
     algebra::abstr::cast::{AsPrimitive, ToPrimitive},
     elementary::{Exponential, Hyperbolic, Power, Trigonometry},
 };
-use std::{f32, f64, i128, i16, i32, i64, i8, u128, u16, u32, u64, u8};
 
-#[cfg(feature = "lapack")]
-pub mod lapack;
 #[cfg(feature = "native")]
 pub mod native;
 
@@ -403,7 +402,7 @@ macro_rules! exponential_impl {
                 self.exp()
             }
 
-            ///Logiarithm function
+            ///Logarithm function
             fn ln(self: Self) -> Self
             {
                 self.ln()
@@ -439,6 +438,41 @@ macro_rules! power_impl {
 
 power_impl!(f32);
 power_impl!(f64);
+
+macro_rules! power_impl_integer {
+    ($t:ty) => {
+        impl Power for $t
+        {
+            fn pow(self: Self, _exp: Self) -> Self
+            {
+                unimplemented!();
+            }
+
+            fn root(self: Self, _root: Self) -> Self
+            {
+                unimplemented!();
+            }
+
+            fn sqrt(self: Self) -> Self
+            {
+                unimplemented!();
+            }
+        }
+    };
+}
+
+power_impl_integer!(u8);
+power_impl_integer!(u16);
+power_impl_integer!(u32);
+power_impl_integer!(u64);
+power_impl_integer!(u128);
+power_impl_integer!(usize);
+power_impl_integer!(i8);
+power_impl_integer!(i16);
+power_impl_integer!(i32);
+power_impl_integer!(i64);
+power_impl_integer!(i128);
+power_impl_integer!(isize);
 
 macro_rules! hyperbolic_impl {
     ($t:ty) => {

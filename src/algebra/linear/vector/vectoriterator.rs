@@ -1,5 +1,4 @@
 use crate::algebra::{
-    abstr::{Field, Scalar},
     linear::matrix::MatrixIterator,
 };
 
@@ -16,7 +15,7 @@ impl<'a, T> VectorIterator<'a, T>
     }
 }
 
-impl<'a, T> Iterator for VectorIterator<'a, T> where T: Field + Scalar
+impl<'a, T> Iterator for VectorIterator<'a, T>
 {
     type Item = &'a T;
 

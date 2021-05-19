@@ -17,7 +17,7 @@ impl<'a, T> MatrixRowIteratorMut<'a, T>
     }
 }
 
-impl<'a, T> Iterator for MatrixRowIteratorMut<'a, T> where T: Field + Scalar
+impl<'a, T> Iterator for MatrixRowIteratorMut<'a, T>
 {
     type Item = &'a mut Vector<T>;
 

@@ -1,12 +1,13 @@
 use crate::algebra::{
-    abstr::Real,
     linear::{
         matrix::{Transpose, EigenDec, Solve},
         Matrix, Vector,
     },
 };
+use crate::algebra::abstr::{Field, Scalar, AbsDiffEq};
+use crate::elementary::Power;
 
-impl<T> Matrix<T> where T: Real
+impl<T> Matrix<T> where T: Field + Scalar + Power + AbsDiffEq<Epsilon = T>
 {
     /// Computes the eigenvalues of a real matrix
     ///
@@ -56,7 +57,7 @@ impl<T> Matrix<T> where T: Real
 
     fn francis(mut self: Self) -> (Matrix<T>, Matrix<T>)
     {
-        let epsilon: T = T::epsilon();
+        let epsilon: T = T::default_epsilon();
 
         let (m, n): (usize, usize) = self.dim();
 

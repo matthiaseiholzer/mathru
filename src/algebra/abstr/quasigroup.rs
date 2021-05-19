@@ -15,7 +15,7 @@ use super::{Addition, Identity, Magma, Multiplication, Operator};
 /// where $`\`$ is the left and $`/`$ is th right division.
 pub trait Quasigroup<O: Operator>: Magma<O> + Identity<O> + PartialEq
 {
-    //fn inverse(self: Self) -> Self;
+
 }
 
 macro_rules! impl_quasigroup(
