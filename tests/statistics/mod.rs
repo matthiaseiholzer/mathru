@@ -3,12 +3,12 @@
 //! Fore more information:
 //! <a href="https://en.wikipedia.org/wiki/Statistics">https://en.wikipedia.org/wiki/Statistics</a>
 
-pub mod combins;
+mod combins;
 
-pub mod distrib;
+mod distrib;
 
 /// Statistical hypothesis testing
 ///
 /// Fore more information:
 /// <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">https://en.wikipedia.org/wiki/Statistical_hypothesis_testing</a>
-pub mod test;
+mod test;

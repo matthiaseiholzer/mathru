@@ -1,5 +1,5 @@
-pub mod beta;
-pub mod gamma;
-pub mod error;
-pub mod hypergeometrical;
+mod beta;
+mod gamma;
+mod error;
+mod hypergeometrical;
 

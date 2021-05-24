@@ -1,5 +1,6 @@
 use crate::algebra::abstr::{Lapack, Zero, Complex};
 use lapack;
+use lapack_sys as ffi;
 
 
 macro_rules! lapack_real (
@@ -160,334 +161,6 @@ lapack_real!(f64,
              lapack::dgetrs);
 
 
-// impl<T> Lapack for Complex<T>
-// 	where T: Real
-// {
-// 	fn xgehrd(_n: i32,
-// 			  _ilo: i32,
-// 			  _ihi: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _tau: &mut [Self],
-// 			  _work: &mut [Self],
-// 			  _lwork: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgehrd_work_size(_n: i32,
-// 						_ilo: i32,
-// 						_ihi: i32,
-// 						_a: &mut [Self],
-// 						_lda: i32,
-// 						_tau: &mut [Self],
-// 						_info: &mut i32)
-// 						-> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xorghr(_n: i32,
-// 			  _ilo: i32,
-// 			  _ihi: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _tau: &[Self],
-// 			  _work: &mut [Self],
-// 			  _lwork: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xorghr_work_size(_n: i32,
-// 						_ilo: i32,
-// 						_ihi: i32,
-// 						_a: &mut [Self],
-// 						_lda: i32,
-// 						_tau: &[Self],
-// 						_info: &mut i32)
-// 						-> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgeev(_jobvl: u8,
-// 			 _jobvr: u8,
-// 			 _n: i32,
-// 			 _a: &mut [Self],
-// 			 _lda: i32,
-// 			 _wr: &mut [Self],
-// 			 _wi: &mut [Self],
-// 			 _vl: &mut [Self],
-// 			 _ldvl: i32,
-// 			 _vr: &mut [Self],
-// 			 _ldvr: i32,
-// 			 _work: &mut [Self],
-// 			 _lwork: i32,
-// 			 _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgeev_work_size(_jobvl: u8,
-// 					   _jobvr: u8,
-// 					   _n: i32,
-// 					   _a: &mut [Self],
-// 					   _lda: i32,
-// 					   _wr: &mut [Self],
-// 					   _wi: &mut [Self],
-// 					   _vl: &mut [Self],
-// 					   _ldvl: i32,
-// 					   _vr: &mut [Self],
-// 					   _ldvr: i32,
-// 					   _info: &mut i32)
-// 					   -> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgetrf(_m: i32, _n: i32, _a: &mut [Self], _lda: i32, _ipiv: &mut [i32], _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgeqrf(_m: i32,
-// 			  _n: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _tau: &mut [Self],
-// 			  _work: &mut [Self],
-// 			  _lwork: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgeqrf_work_size(_m: i32,
-// 						_n: i32,
-// 						_a: &mut [Self],
-// 						_lda: i32,
-// 						_tau: &mut [Self],
-// 						_info: &mut i32)
-// 						-> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xorgqr(_m: i32,
-// 			  _n: i32,
-// 			  _k: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _tau: &mut [Self],
-// 			  _work: &mut [Self],
-// 			  _lwork: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xorgqr_work_size(_m: i32,
-// 						_n: i32,
-// 						_k: i32,
-// 						_a: &mut [Self],
-// 						_lda: i32,
-// 						_tau: &mut [Self],
-// 						_info: &mut i32)
-// 						-> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgetri(_n: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _ipiv: &mut [i32],
-// 			  _work: &mut [Self],
-// 			  _lwork: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgetri_work_size(_n: i32,
-// 						_a: &mut [Self],
-// 						_lda: i32,
-// 						_ipiv: &mut [i32],
-// 						_info: &mut i32)
-// 						-> i32
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xpotrf(_uplo: char, _n: i32, _a: &mut [Self], _lda: i32, _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xgetrs(_n: i32,
-// 			  _nrhs: i32,
-// 			  _a: &mut [Self],
-// 			  _lda: i32,
-// 			  _ipiv: &mut [i32],
-// 			  _b: &mut [Self],
-// 			  _ldb: i32,
-// 			  _info: &mut i32)
-// 	{
-// 		unimplemented!();
-// 	}
-// }
-
-// macro_rules! blas_complex (
-//     ($T: ty, $xgemm: path, $xtrsm: path, $xscal: path, $xaxpy: path)
-//     => (
-// 		impl Blas for Complex<$T>
-// 		{
-// 			fn xgemm(_transa: u8,
-// 					 _transb: u8,
-// 					 _m: i32,
-// 					 _n: i32,
-// 					 _k: i32,
-// 					 _alpha: Self,
-// 					 _a: &[Self],
-// 					 _lda: i32,
-// 					 _b: &[Self],
-// 					 _ldb: i32,
-// 					 _beta: Self,
-// 					 _c: &mut [Self],
-// 					 _ldc: i32)
-// 			{
-// 				unimplemented!();
-// 			}
-//
-// 			fn xtrsm(_side: char,
-// 					 _uplo: char,
-// 					 _transa: char,
-// 					 _diag: char,
-// 					 _m: i32,
-// 					 _n: i32,
-// 					 _alpha: Self,
-// 					 _a: &[Self],
-// 					 _lda: i32,
-// 					 _b: &mut [Self],
-// 					 _ldb: i32)
-// 			{
-// 				unimplemented!();
-// 			}
-//
-// 			fn xscal(_n: i32, _a: Self, _x: &mut [Self], _inc: i32)
-// 			{
-// 				unimplemented!();
-// 			}
-//
-// 			fn xaxpy(n: i32, a: Self, x: &[Self], incx: i32, y: &mut [Self], incy: i32)
-// 			{
-// 				unsafe
-// 			    {
-// 			        $xaxpy(n, a, x, incx, y, incy)
-// 			    }
-// 			}
-// 		}
-// 	)
-// );
-//
-
-// impl<T> Blas for Complex<T>
-// 	where T: Real
-// {
-// 	fn xgemm(_transa: u8,
-// 			 _transb: u8,
-// 			 _m: i32,
-// 			 _n: i32,
-// 			 _k: i32,
-// 			 _alpha: Self,
-// 			 _a: &[Self],
-// 			 _lda: i32,
-// 			 _b: &[Self],
-// 			 _ldb: i32,
-// 			 _beta: Self,
-// 			 _c: &mut [Self],
-// 			 _ldc: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xtrsm(_side: char,
-// 			 _uplo: char,
-// 			 _transa: char,
-// 			 _diag: char,
-// 			 _m: i32,
-// 			 _n: i32,
-// 			 _alpha: Self,
-// 			 _a: &[Self],
-// 			 _lda: i32,
-// 			 _b: &mut [Self],
-// 			 _ldb: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xscal(_n: i32, _a: Self, _x: &mut [Self], _inc: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xaxpy(n: i32, a: Self, x: &[Self], incx: i32, y: &mut [Self], incy: i32)
-// 	{
-// 		unimplemented!()
-// 	}
-// }
-
-
-// impl<T> Blas for Complex<T>
-// 	where T: Real
-// {
-// 	fn xgemm(_transa: u8,
-// 			 _transb: u8,
-// 			 _m: i32,
-// 			 _n: i32,
-// 			 _k: i32,
-// 			 _alpha: Self,
-// 			 _a: &[Self],
-// 			 _lda: i32,
-// 			 _b: &[Self],
-// 			 _ldb: i32,
-// 			 _beta: Self,
-// 			 _c: &mut [Self],
-// 			 _ldc: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xtrsm(_side: char,
-// 			 _uplo: char,
-// 			 _transa: char,
-// 			 _diag: char,
-// 			 _m: i32,
-// 			 _n: i32,
-// 			 _alpha: Self,
-// 			 _a: &[Self],
-// 			 _lda: i32,
-// 			 _b: &mut [Self],
-// 			 _ldb: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xscal(_n: i32, _a: Self, _x: &mut [Self], _inc: i32)
-// 	{
-// 		unimplemented!();
-// 	}
-//
-// 	fn xaxpy(n: i32, a: Self, x: &[Self], incx: i32, y: &mut [Self], incy: i32)
-// 	{
-// 		unimplemented!()
-// 	}
-// }
-
-
 impl Lapack for Complex<f64>
 {
 	fn xgehrd(_n: i32,
@@ -575,9 +248,11 @@ impl Lapack for Complex<f64>
 		unimplemented!();
 	}
 
-	fn xgetrf(_m: i32, _n: i32, _a: &mut [Self], _lda: i32, _ipiv: &mut [i32], _info: &mut i32)
+	fn xgetrf(m: i32, n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32)
 	{
-		unimplemented!();
+		unsafe {
+			ffi::zgetrf_(&m, &n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_mut_ptr(), info);
+		}
 	}
 
 	fn xgeqrf(_m: i32,
@@ -679,7 +354,7 @@ impl Lapack for Complex<f32>
 			  _lwork: i32,
 			  _info: &mut i32)
 	{
-
+		unimplemented!()
 	}
 
 	fn xgehrd_work_size(_n: i32,
@@ -754,9 +429,11 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xgetrf(_m: i32, _n: i32, _a: &mut [Self], _lda: i32, _ipiv: &mut [i32], _info: &mut i32)
+	fn xgetrf(m: i32, n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32)
 	{
-		unimplemented!();
+		unsafe {
+			ffi::cgetrf_(&m, &n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_mut_ptr(), info);
+		}
 	}
 
 	fn xgeqrf(_m: i32,
