@@ -158,23 +158,7 @@ fn solve_0()
     assert_relative_eq!(x, x_ref, epsilon=10e-10);
 }
 
-#[test]
-fn solve_1()
-{
-    let a: Matrix<f64> = matrix![   1.0, -2.0, 3.0;
-                                    2.0, -5.0, 12.0;
-                                    0.0, 2.0, -10.0];
 
-    let x_ref: Matrix<f64> = matrix![   -13.0, 7.0, 4.5;
-                                        -10.0, 5.0, 3.0;
-                                        -2.0, 1.0, 0.5];
-
-    let id: Matrix<f64> = Matrix::one(3);
-
-    let x = a.solve(&id).unwrap();
-
-    assert_relative_eq!(x, x_ref, epsilon=10e-10);
-}
 
 #[test]
 fn inv_0()

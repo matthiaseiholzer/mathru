@@ -28,9 +28,9 @@ pub struct Complex<T>
     where T: Real
 {
     /// Real portion of the complex number
-    re: T,
+    pub re: T,
     /// Imaginary  portion of the complex number
-    im: T,
+    pub im: T,
 }
 
 impl<T> Complex<T> where T: Real
@@ -62,9 +62,22 @@ impl<T> Neg for Complex<T> where T: Real /* Neg<Output = T> */
 impl<T> PartialOrd for Complex<T>
     where T: Real
 {
-    fn partial_cmp(self: &Self, _other: &Self) -> Option<Ordering>
+    fn partial_cmp(self: &Self, other: &Self) -> Option<Ordering>
     {
-        unimplemented!()
+        if self == other {
+            return Some(Ordering::Equal)
+        }
+        else
+        {
+            if self.abs().to_f64() > other.abs().to_f64()
+            {
+                return Some(Ordering::Greater)
+            }
+            else
+            {
+                return Some(Ordering::Less)
+            }
+        }
     }
 }
 

@@ -40,7 +40,7 @@ impl<T> Matrix<T> where T: Field + Scalar
 
             for l in i + 1..a.m
             {
-                if a.get(l, i).abs().to_f64() > max.abs().to_f64()
+                if *a.get(l, i) > max
                 {
                     max = *a.get(l, i);
                     i_max = l;

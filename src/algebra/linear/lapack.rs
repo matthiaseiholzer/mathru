@@ -92,8 +92,7 @@ macro_rules! lapack_real (
 				unsafe { $xorgqr(m, n, k, a, lda, tau, work, lwork, info) };
 			}
 
-  			fn xorgqr_work_size(m: i32, n: i32, k: i32, a: &mut [Self], lda: i32, tau: &mut [Self], info: &mut i32) ->
-  			 i32
+  			fn xorgqr_work_size(m: i32, n: i32, k: i32, a: &mut [Self], lda: i32, tau: &mut [Self], info: &mut i32) -> i32
 			{
 				let mut work = [<$T>::zero() ];
                 let lwork = -1 as i32;
@@ -436,27 +435,36 @@ impl Lapack for Complex<f32>
 		}
 	}
 
-	fn xgeqrf(_m: i32,
-			  _n: i32,
-			  _a: &mut [Self],
-			  _lda: i32,
-			  _tau: &mut [Self],
-			  _work: &mut [Self],
-			  _lwork: i32,
-			  _info: &mut i32)
+	fn xgeqrf(
+			m: i32,
+			  n: i32,
+			  a: &mut [Self],
+			  lda: i32,
+			  tau: &mut [Self],
+			  work: &mut [Self],
+			  lwork: i32,
+			  info: &mut i32)
 	{
-		unimplemented!();
+		unsafe {
+			ffi::cgeqrf_(&m, &n, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info)
+		};
 	}
 
-	fn xgeqrf_work_size(_m: i32,
-						_n: i32,
-						_a: &mut [Self],
-						_lda: i32,
-						_tau: &mut [Self],
-						_info: &mut i32)
+	fn xgeqrf_work_size(m: i32,
+						n: i32,
+						a: &mut [Self],
+						lda: i32,
+						tau: &mut [Self],
+						info: &mut i32)
 						-> i32
 	{
-		unimplemented!();
+		let mut work = [Self::zero()];
+		let lwork = -1 as i32;
+
+		unsafe {
+			ffi::cgeqrf_(&m, &n, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info)
+		};
+		work[0].re as i32
 	}
 
 	fn xorgqr(_m: i32,
@@ -472,13 +480,13 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xorgqr_work_size(_m: i32,
-						_n: i32,
-						_k: i32,
+	fn xorgqr_work_size(m: i32,
+						n: i32,
+						k: i32,
 						_a: &mut [Self],
-						_lda: i32,
-						_tau: &mut [Self],
-						_info: &mut i32)
+						lda: i32,
+						tau: &mut [Self],
+						info: &mut i32)
 						-> i32
 	{
 		unimplemented!();

@@ -10,3 +10,4 @@ mod mul;
 mod qr;
 mod sub;
 mod iterator;
+mod solve;
