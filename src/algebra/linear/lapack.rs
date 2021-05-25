@@ -1,6 +1,7 @@
 use crate::algebra::abstr::{Lapack, Zero, Complex};
 use lapack;
 use lapack_sys as ffi;
+use std::os::raw::c_char;
 
 
 macro_rules! lapack_real (
@@ -328,16 +329,19 @@ impl Lapack for Complex<f64>
 		unimplemented!();
 	}
 
-	fn xgetrs(_n: i32,
-			  _nrhs: i32,
-			  _a: &mut [Self],
-			  _lda: i32,
-			  _ipiv: &mut [i32],
-			  _b: &mut [Self],
-			  _ldb: i32,
-			  _info: &mut i32)
+	fn xgetrs(n: i32,
+			  nrhs: i32,
+			  a: &mut [Self],
+			  lda: i32,
+			  ipiv: &mut [i32],
+			  b: &mut [Self],
+			  ldb: i32,
+			  info: &mut i32)
 	{
-		unimplemented!();
+		unsafe
+		{
+			ffi::zgetrs_(&('N' as c_char), &n, &nrhs, a.as_ptr() as *const _, &lda, ipiv.as_ptr() as *const _, b.as_mut_ptr() as *mut _, &ldb, info as *mut _);
+		}
 	}
 }
 
@@ -480,13 +484,13 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xorgqr_work_size(m: i32,
-						n: i32,
-						k: i32,
+	fn xorgqr_work_size(_m: i32,
+						_n: i32,
+						_k: i32,
 						_a: &mut [Self],
-						lda: i32,
-						tau: &mut [Self],
-						info: &mut i32)
+						_lda: i32,
+						_tau: &mut [Self],
+						_info: &mut i32)
 						-> i32
 	{
 		unimplemented!();
@@ -518,15 +522,18 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xgetrs(_n: i32,
-			  _nrhs: i32,
-			  _a: &mut [Self],
-			  _lda: i32,
-			  _ipiv: &mut [i32],
-			  _b: &mut [Self],
-			  _ldb: i32,
-			  _info: &mut i32)
+	fn xgetrs(n: i32,
+			  nrhs: i32,
+			  a: &mut [Self],
+			  lda: i32,
+			  ipiv: &mut [i32],
+			  b: &mut [Self],
+			  ldb: i32,
+			  info: &mut i32)
 	{
-		unimplemented!();
+		unsafe
+		{
+			ffi::cgetrs_(&('N' as c_char), &n, &nrhs, a.as_ptr() as *const _, &lda, ipiv.as_ptr() as *const _, b.as_mut_ptr() as *mut _, &ldb, info as *mut _);
+		}
 	}
 }
