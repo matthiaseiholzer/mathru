@@ -80,7 +80,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
 
         assert_eq!(0, info);
 
-        T::xg(n_i32,
+        T::xorghr(n_i32,
                   1,
                   n_i32,
                   &mut q[..],
