@@ -2,6 +2,22 @@ use mathru::algebra::linear::{matrix::Inverse, Matrix};
 use mathru::algebra::abstr::Complex;
 
 #[test]
+fn inv_f32()
+{
+    let a: Matrix<f32> = matrix![   1.0, -2.0, 3.0;
+                                    2.0, -5.0, 12.0;
+                                    0.0, 2.0, -10.0];
+
+    let a_inv_ref: Matrix<f32> = matrix![  -13.0, 7.0, 4.5;
+                                            -10.0, 5.0, 3.0;
+                                            -2.0, 1.0, 0.5];
+
+    let a_inv: Matrix<f32> = a.inv().unwrap();
+
+    assert_relative_eq!(a_inv, a_inv_ref, epsilon=2.0e-5);
+}
+
+#[test]
 fn inv_f64()
 {
     let a: Matrix<f64> = matrix![   1.0, -2.0, 3.0;
