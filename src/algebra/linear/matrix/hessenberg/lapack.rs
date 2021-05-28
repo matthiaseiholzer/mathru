@@ -74,8 +74,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
 
         let mut info: i32 = 0;
 
-        let lwork: i32 =
-            T::xorghr_work_size(n_i32, 1, n_i32, &mut q[..], n_i32, tau.as_mut(), &mut info);
+        let lwork: i32 = T::xorghr_work_size(n_i32, 1, n_i32, &mut q[..], n_i32, tau.as_mut(), &mut info);
         let mut work_xorghr = vec![T::zero(); lwork as usize];
 
         assert_eq!(0, info);

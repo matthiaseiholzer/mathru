@@ -35,8 +35,7 @@ macro_rules! lapack_real (
                 unsafe { $xorghr(n, ilo, ihi, a, lda, tau, work, lwork, info) }
             }
 
-            fn xorghr_work_size(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32,
-                                tau: &[Self], info: &mut i32) -> i32 {
+            fn xorghr_work_size(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32, tau: &[Self], info: &mut i32) -> i32 {
                 let mut work = [<$T>::zero() ];
                 let lwork = -1 as i32;
 
@@ -46,22 +45,24 @@ macro_rules! lapack_real (
             }
 
             fn xgeev(jobvl: u8, jobvr: u8, n: i32, a: &mut [Self], lda: i32,
-                     wr: &mut [Self], wi: &mut [Self],
+                     w: &mut [Self],
                      vl: &mut [Self], ldvl: i32, vr: &mut [Self], ldvr: i32,
                      work: &mut [Self], lwork: i32, info: &mut i32)
           	{
-                unsafe { $xgeev(jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, work, lwork, info) }
+          		let mut wi = Vec::with_capacity(n as usize);
+                unsafe { $xgeev(jobvl, jobvr, n, a, lda, w, &mut wi, vl, ldvl, vr, ldvr, work, lwork, info) }
             }
 
 
             fn xgeev_work_size(jobvl: u8, jobvr: u8, n: i32, a: &mut [Self], lda: i32,
-                               wr: &mut [Self], wi: &mut [Self], vl: &mut [Self], ldvl: i32,
+                               w: &mut [Self], vl: &mut [Self], ldvl: i32,
                                vr: &mut [Self], ldvr: i32, info: &mut i32) -> i32
           	{
-                let mut work = [ <$T>::zero() ];
+                let mut work = [<$T>::zero()];
+                let mut wi = Vec::with_capacity(n as usize);
                 let lwork = -1 as i32;
 
-                unsafe { $xgeev(jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, &mut work, lwork, info) };
+                unsafe { $xgeev(jobvl, jobvr, n, a, lda, w, &mut wi, vl, ldvl, vr, ldvr, &mut work, lwork, info) };
                 work[0] as i32
 			}
 
@@ -103,12 +104,12 @@ macro_rules! lapack_real (
 			}
 
 			//
-			fn xgetri(n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], work: &mut [Self], lwork: i32, info: &mut i32)
+			fn xgetri(n: i32, a: &mut [Self], lda: i32, ipiv: &[i32], work: &mut [Self], lwork: i32, info: &mut i32)
 			{
                 unsafe { $xgetri(n, a, lda, ipiv, work, lwork, info)}
 			}
 
-			fn xgetri_work_size(n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32) -> i32
+			fn xgetri_work_size(n: i32, a: &mut [Self], lda: i32, ipiv: &[i32], info: &mut i32) -> i32
 			{
 				let mut work = [ <$T>::zero() ];
                 let lwork = -1 as i32;
@@ -186,6 +187,12 @@ impl Lapack for Complex<f64>
 						-> i32
 	{
 		unimplemented!();
+		// let mut work = [Self::zero()];
+		// let lwork = -1 as i32;
+		//
+		// unsafe { ffi::zgehrd_(&n, &ilo, &ihi, a., &lda, tau, &mut work, lwork, info) };
+		//
+		// work[0] as i32
 	}
 
 	fn xorghr(_n: i32,
@@ -218,8 +225,7 @@ impl Lapack for Complex<f64>
 			 _n: i32,
 			 _a: &mut [Self],
 			 _lda: i32,
-			 _wr: &mut [Self],
-			 _wi: &mut [Self],
+			 _w: &mut [Self],
 			 _vl: &mut [Self],
 			 _ldvl: i32,
 			 _vr: &mut [Self],
@@ -231,26 +237,34 @@ impl Lapack for Complex<f64>
 		unimplemented!();
 	}
 
-	fn xgeev_work_size(_jobvl: u8,
-					   _jobvr: u8,
-					   _n: i32,
-					   _a: &mut [Self],
-					   _lda: i32,
-					   _wr: &mut [Self],
-					   _wi: &mut [Self],
-					   _vl: &mut [Self],
-					   _ldvl: i32,
-					   _vr: &mut [Self],
-					   _ldvr: i32,
-					   _info: &mut i32)
+	fn xgeev_work_size(jobvl: u8,
+					   jobvr: u8,
+					   n: i32,
+					   a: &mut [Self],
+					   lda: i32,
+					   w: &mut [Self],
+					   vl: &mut [Self],
+					   ldvl: i32,
+					   vr: &mut [Self],
+					   ldvr: i32,
+					   info: &mut i32)
 					   -> i32
 	{
-		unimplemented!();
+		let mut work = [Self::zero()];
+		let lwork = -1 as i32;
+		let mut rwork: Vec<f64> = Vec::with_capacity(2*n as usize);
+
+		unsafe
+		{
+			ffi::zgeev_(&(jobvl as c_char), &(jobvr as c_char), &n, a.as_mut_ptr() as *mut _, &lda, w.as_mut_ptr() as *mut _, vl.as_mut_ptr() as *mut _, &ldvl, vr.as_mut_ptr() as *mut _, &ldvr, work.as_mut_ptr() as *mut _, &lwork, rwork.as_mut_ptr() as *mut _, info as *mut _)
+		};
+		work[0].re as i32
 	}
 
 	fn xgetrf(m: i32, n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32)
 	{
-		unsafe {
+		unsafe
+		{
 			ffi::zgetrf_(&m, &n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_mut_ptr(), info);
 		}
 	}
@@ -303,25 +317,35 @@ impl Lapack for Complex<f64>
 		unimplemented!();
 	}
 
-	fn xgetri(_n: i32,
-			  _a: &mut [Self],
-			  _lda: i32,
-			  _ipiv: &mut [i32],
-			  _work: &mut [Self],
-			  _lwork: i32,
-			  _info: &mut i32)
+	fn xgetri(n: i32,
+			  a: &mut [Self],
+			  lda: i32,
+			  ipiv: &[i32],
+			  work: &mut [Self],
+			  lwork: i32,
+			  info: &mut i32)
 	{
-		unimplemented!();
+		unsafe
+		{
+			ffi::zgetri_(&n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_ptr(), work.as_mut_ptr() as *mut _, &lwork, info)
+		};
 	}
 
-	fn xgetri_work_size(_n: i32,
-						_a: &mut [Self],
-						_lda: i32,
-						_ipiv: &mut [i32],
-						_info: &mut i32)
+	fn xgetri_work_size(n: i32,
+						a: &mut [Self],
+						lda: i32,
+						ipiv: &[i32],
+						info: &mut i32)
 						-> i32
 	{
-		unimplemented!();
+		let mut work = [Self::zero()];
+		let lwork = -1 as i32;
+		unsafe
+		{
+			ffi::zgetri_(&n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_ptr(), work.as_mut_ptr() as *mut _, &lwork, info)
+		};
+
+		work[0].re as i32
 	}
 
 	fn xpotrf(_uplo: char, _n: i32, _a: &mut [Self], _lda: i32, _info: &mut i32)
@@ -397,39 +421,50 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xgeev(_jobvl: u8,
-			 _jobvr: u8,
-			 _n: i32,
-			 _a: &mut [Self],
-			 _lda: i32,
-			 _wr: &mut [Self],
-			 _wi: &mut [Self],
-			 _vl: &mut [Self],
-			 _ldvl: i32,
-			 _vr: &mut [Self],
-			 _ldvr: i32,
-			 _work: &mut [Self],
-			 _lwork: i32,
-			 _info: &mut i32)
+	fn xgeev(jobvl: u8,
+			 jobvr: u8,
+			 n: i32,
+			 a: &mut [Self],
+			 lda: i32,
+			 w: &mut [Self],
+			 vl: &mut [Self],
+			 ldvl: i32,
+			 vr: &mut [Self],
+			 ldvr: i32,
+			 work: &mut [Self],
+			 lwork: i32,
+			 info: &mut i32)
 	{
-		unimplemented!();
+		let mut rwork: Vec<f32> = Vec::with_capacity(2*n as usize);
+
+		unsafe
+		{
+			ffi::cgeev_(&(jobvl as c_char), &(jobvr as c_char), &n, a.as_mut_ptr() as *mut _, &lda, w.as_mut_ptr() as *mut _, vl.as_mut_ptr() as *mut _, &ldvl, vr.as_mut_ptr() as *mut _, &ldvr, work.as_mut_ptr() as *mut _, &lwork, rwork.as_mut_ptr() as *mut _, info as *mut _)
+		};
 	}
 
-	fn xgeev_work_size(_jobvl: u8,
-					   _jobvr: u8,
-					   _n: i32,
-					   _a: &mut [Self],
-					   _lda: i32,
-					   _wr: &mut [Self],
-					   _wi: &mut [Self],
-					   _vl: &mut [Self],
-					   _ldvl: i32,
-					   _vr: &mut [Self],
-					   _ldvr: i32,
-					   _info: &mut i32)
+	fn xgeev_work_size(jobvl: u8,
+					   jobvr: u8,
+					   n: i32,
+					   a: &mut [Self],
+					   lda: i32,
+					   w: &mut [Self],
+					   vl: &mut [Self],
+					   ldvl: i32,
+					   vr: &mut [Self],
+					   ldvr: i32,
+					   info: &mut i32)
 					   -> i32
 	{
-		unimplemented!();
+		let mut work = [Self::zero()];
+		let lwork: i32 = -1 as i32;
+		let mut rwork: Vec<f32> = Vec::with_capacity(2*n as usize);
+
+		unsafe
+		{
+			ffi::cgeev_(&(jobvl as c_char), &(jobvr as c_char), &n, a.as_mut_ptr() as *mut _, &lda, w.as_mut_ptr() as *mut _, vl.as_mut_ptr() as *mut _, &ldvl, vr.as_mut_ptr() as *mut _, &ldvr, work.as_mut_ptr() as *mut _, &lwork, rwork.as_mut_ptr() as *mut _, info as *mut _)
+		};
+		work[0].re as i32
 	}
 
 	fn xgetrf(m: i32, n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32)
@@ -496,25 +531,35 @@ impl Lapack for Complex<f32>
 		unimplemented!();
 	}
 
-	fn xgetri(_n: i32,
-			  _a: &mut [Self],
-			  _lda: i32,
-			  _ipiv: &mut [i32],
-			  _work: &mut [Self],
-			  _lwork: i32,
-			  _info: &mut i32)
+	fn xgetri(n: i32,
+			  a: &mut [Self],
+			  lda: i32,
+			  ipiv: &[i32],
+			  work: &mut [Self],
+			  lwork: i32,
+			  info: &mut i32)
 	{
-		unimplemented!();
+		unsafe
+		{
+			ffi::cgetri_(&n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_ptr(), work.as_mut_ptr() as *mut _, &lwork, info)
+		};
 	}
 
-	fn xgetri_work_size(_n: i32,
-						_a: &mut [Self],
-						_lda: i32,
-						_ipiv: &mut [i32],
-						_info: &mut i32)
+	fn xgetri_work_size(n: i32,
+						a: &mut [Self],
+						lda: i32,
+						ipiv: &[i32],
+						info: &mut i32)
 						-> i32
 	{
-		unimplemented!();
+		let mut work = [Self::zero()];
+		let lwork = -1 as i32;
+		unsafe
+		{
+			ffi::cgetri_(&n, a.as_mut_ptr() as *mut _, &lda, ipiv.as_ptr(), work.as_mut_ptr() as *mut _, &lwork, info)
+		};
+
+		work[0].re as i32
 	}
 
 	fn xpotrf(_uplo: char, _n: i32, _a: &mut [Self], _lda: i32, _info: &mut i32)

@@ -37,8 +37,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
 
         let mut info: i32 = 0;
 
-        let mut wr: Vec<T> = vec![T::zero(); n];
-        let mut wi: Vec<T> = vec![T::zero(); n];
+        let mut w: Vec<T> = vec![T::zero(); n];
 
         let mut temp1 = [T::zero()];
         let mut temp2 = vec![T::zero(); n * n];
@@ -48,8 +47,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
                                        n_i32,
                                        &mut self_data[..],
                                        n_i32,
-                                       wr.as_mut_slice(),
-                                       wi.as_mut_slice(),
+                                       w.as_mut_slice(),
                                        &mut temp1,
                                        n_i32,
                                        &mut temp2,
@@ -63,8 +61,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
                  n_i32,
                  &mut self_data[..],
                  n_i32,
-                 wr.as_mut_slice(),
-                 wi.as_mut_slice(),
+                 w.as_mut_slice(),
                  &mut temp1,
                  1 as i32,
                  &mut temp2,
@@ -75,6 +72,6 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
 
         assert_eq!(0, info);
 
-        return EigenDec::new(Vector::new_column(m, wr), Matrix::new(n, n, temp2));
+        return EigenDec::new(Vector::new_column(m, w), Matrix::new(n, n, temp2));
     }
 }

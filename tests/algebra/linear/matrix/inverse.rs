@@ -1,13 +1,13 @@
 use mathru::algebra::linear::{matrix::Inverse, Matrix};
+use mathru::algebra::abstr::Complex;
 
 #[test]
-fn inv_0()
+fn inv_f64()
 {
     let a: Matrix<f64> = matrix![   1.0, -2.0, 3.0;
                                     2.0, -5.0, 12.0;
                                     0.0, 2.0, -10.0];
 
-    //let (l, u, p) : (Matrix<f64>, Matrix<f64>, Matrix<f64>) = a.dec_lu();
     let a_inv_ref: Matrix<f64> = matrix![  -13.0, 7.0, 4.5;
                                             -10.0, 5.0, 3.0;
                                             -2.0, 1.0, 0.5];
@@ -15,6 +15,38 @@ fn inv_0()
     let a_inv: Matrix<f64> = a.inv().unwrap();
 
     assert_relative_eq!(a_inv, a_inv_ref, epsilon=1.0e-10);
+}
+
+#[test]
+fn inv_complex_f64()
+{
+    let a: Matrix<Complex<f64>> = matrix![  Complex::new(1.0, 0.0), Complex::new(-2.0, 0.0), Complex::new(3.0, 0.0);
+                                            Complex::new(2.0, 0.0), Complex::new(-5.0, 0.0), Complex::new(12.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(2.0, 0.0), Complex::new(-10.0, 0.0)];
+
+    let a_inv_ref: Matrix<Complex<f64>> = matrix![  Complex::new(-13.0, 0.0), Complex::new(7.0, 0.0), Complex::new(4.5, 0.0);
+                                                    Complex::new(-10.0, 0.0), Complex::new(5.0, 0.0), Complex::new(3.0, 0.0);
+                                                    Complex::new(-2.0, 0.0), Complex::new(1.0, 0.0), Complex::new(0.5, 0.0)];
+
+    let a_inv: Matrix<Complex<f64>> = a.inv().unwrap();
+
+    assert_relative_eq!(a_inv, a_inv_ref, epsilon=Complex::new(1.0e-10, 1.0e-10));
+}
+
+#[test]
+fn inv_complex_f32()
+{
+    let a: Matrix<Complex<f32>> = matrix![  Complex::new(1.0, 0.0), Complex::new(-2.0, 0.0), Complex::new(3.0, 0.0);
+                                            Complex::new(2.0, 0.0), Complex::new(-5.0, 0.0), Complex::new(12.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(2.0, 0.0), Complex::new(-10.0, 0.0)];
+
+    let a_inv_ref: Matrix<Complex<f32>> = matrix![  Complex::new(-13.0, 0.0), Complex::new(7.0, 0.0), Complex::new(4.5, 0.0);
+                                                    Complex::new(-10.0, 0.0), Complex::new(5.0, 0.0), Complex::new(3.0, 0.0);
+                                                    Complex::new(-2.0, 0.0), Complex::new(1.0, 0.0), Complex::new(0.5, 0.0)];
+
+    let a_inv: Matrix<Complex<f32>> = a.inv().unwrap();
+
+    assert_relative_eq!(a_inv, a_inv_ref, epsilon=Complex::new(2.0e-5, 2.0e-5));
 }
 
 #[test]

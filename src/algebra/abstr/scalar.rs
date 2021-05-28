@@ -90,8 +90,7 @@ pub trait Lapack: Sized + Zero
              n: i32,
              a: &mut [Self],
              lda: i32,
-             wr: &mut [Self],
-             wi: &mut [Self],
+             w: &mut [Self],
              vl: &mut [Self],
              ldvl: i32,
              vr: &mut [Self],
@@ -105,8 +104,7 @@ pub trait Lapack: Sized + Zero
                        n: i32,
                        a: &mut [Self],
                        lda: i32,
-                       wr: &mut [Self],
-                       wi: &mut [Self],
+                       w: &mut [Self],
                        vl: &mut [Self],
                        ldvl: i32,
                        vr: &mut [Self],
@@ -155,12 +153,12 @@ pub trait Lapack: Sized + Zero
     fn xgetri(n: i32,
               a: &mut [Self],
               lda: i32,
-              ipiv: &mut [i32],
+              ipiv: &[i32],
               work: &mut [Self],
               lwork: i32,
               info: &mut i32);
 
-    fn xgetri_work_size(n: i32, a: &mut [Self], lda: i32, ipiv: &mut [i32], info: &mut i32) -> i32;
+    fn xgetri_work_size(n: i32, a: &mut [Self], lda: i32, ipiv: &[i32], info: &mut i32) -> i32;
 
     fn xpotrf(uplo: char, n: i32, a: &mut [Self], lda: i32, info: &mut i32);
 
