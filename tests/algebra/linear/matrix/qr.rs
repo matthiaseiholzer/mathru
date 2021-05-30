@@ -2,7 +2,29 @@ use mathru::{algebra::linear::Matrix};
 
 #[cfg(feature = "native")]
 #[test]
-fn decompose_qr0()
+fn decompose_f32()
+{
+    let a: Matrix<f32> = matrix![   6.0, 5.0, 0.0;
+                                    5.0, 1.0, 4.0;
+                                    0.0, 4.0, 3.0];
+
+    let (q, r): (Matrix<f32>, Matrix<f32>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<f32> = matrix![   7.682212795973757e-01, 3.326541793600714e-01, 5.469709887444194e-01;
+                                        6.401843996644797e-01, -3.991850152320858e-01, -6.563651864933034e-01;
+                                        0.0, 8.543959975142890e-01, -5.196224393071984e-01];
+
+    let r_ref: Matrix<f32> = matrix![   7.810249675906654, 4.48129079765136, 2.5607375986579197;
+                                        0.0, 4.681669871625427, 0.9664479316145234;
+                                        0.0, 0.0, -4.184328063894809];
+
+    assert_relative_eq!(q, q_ref, epsilon=1.0e-5, max_relative=1.0e-5);
+    assert_relative_eq!(r, r_ref, epsilon=1.0e-5, max_relative=1.0e-5);
+}
+
+#[cfg(feature = "native")]
+#[test]
+fn decompose_f64()
 {
     let a: Matrix<f64> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;
@@ -24,7 +46,29 @@ fn decompose_qr0()
 
 #[cfg(feature = "lapack")]
 #[test]
-fn decompose_qr0()
+fn decompose_f32()
+{
+    let a: Matrix<f32> = matrix![   6.0, 5.0, 0.0;
+                                    5.0, 1.0, 4.0;
+                                    0.0, 4.0, 3.0];
+
+    let (q, r): (Matrix<f32>, Matrix<f32>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<f32> = matrix![   -7.682212795973757e-01, 3.326541793600714e-01, -5.469709887444194e-01;
+                                        -6.401843996644797e-01, -3.991850152320858e-01, 6.563651864933034e-01;
+                                        -0.000000000000000e+00, 8.543959975142890e-01, 5.196224393071984e-01];
+
+    let r_ref: Matrix<f32> = matrix![  -7.810249675906654, -4.48129079765136, -2.5607375986579197;
+                                        0.0, 4.681669871625427, 0.9664479316145234;
+                                        0.0, 0.0, 4.184328063894809];
+
+    assert_relative_eq!(q, q_ref, epsilon=1.0e-5, max_relative=1.0e-5);
+    assert_relative_eq!(r, r_ref, epsilon=1.0e-5, max_relative=1.0e-5);
+}
+
+#[cfg(feature = "lapack")]
+#[test]
+fn decompose_f64()
 {
     let a: Matrix<f64> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;

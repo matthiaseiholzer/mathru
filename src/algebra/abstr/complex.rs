@@ -410,7 +410,7 @@ impl<T: ToPrimitive> ToPrimitive for Complex<T>
 
 #[cfg(feature = "native")]
 impl<T> Exponential for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>
+    where T: Real
 {
     /// Returns the euler number represented as a complex number
     fn e() -> Self
@@ -459,7 +459,7 @@ impl<T> Exponential for Complex<T>
 
 #[cfg(feature = "lapack")]
 impl<T> Exponential for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>,
+    where T: Real,
     Complex<T>: Lapack + Blas
 {
     /// Returns the euler number represented as a complex number
@@ -507,7 +507,7 @@ impl<T> Exponential for Complex<T>
 
 #[cfg(feature = "native")]
 impl<T> Trigonometry for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>
+    where T: Real
 {
     /// Returns the mathematics constant PI, represented as a complex number
     fn pi() -> Self
@@ -886,7 +886,7 @@ impl<T> Trigonometry for Complex<T>
 
 #[cfg(feature = "lapack")]
 impl<T> Trigonometry for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>,
+    where T: Real,
     Complex<T>: Lapack + Blas
 {
     /// Returns the mathematics constant PI, represented as a complex number
@@ -1258,7 +1258,7 @@ impl<T> Trigonometry for Complex<T>
 
 #[cfg(feature = "native")]
 impl<T> Power for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>
+    where T: Real
 {
     /// Power
     ///
@@ -1292,14 +1292,17 @@ impl<T> Power for Complex<T>
 
     fn sqrt(self: Self) -> Self
     {
-        unimplemented!();
+        let arg = self.arg().re * T::from_f64(0.5);
+        let abs = self.abs().re.sqrt();
+
+        return Complex::new(abs.clone() * (arg.cos()), abs * (arg.sin()));
     }
 }
 
 
 #[cfg(feature = "lapack")]
 impl<T> Power for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>,
+    where T: Real,
           Complex<T>: Lapack + Blas
 
 {
@@ -1340,7 +1343,7 @@ impl<T> Power for Complex<T>
 
 #[cfg(feature = "native")]
 impl<T> Hyperbolic for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>
+    where T: Real
 {
     /// Hyperbolic sine
     fn sinh(self: Self) -> Self
@@ -1439,7 +1442,7 @@ impl<T> Hyperbolic for Complex<T>
 
 #[cfg(feature = "lapack")]
 impl<T> Hyperbolic for Complex<T>
-    where T: Real + AbsDiffEq<Epsilon = T>,
+    where T: Real,
     Complex<T>: Lapack + Blas
 {
     /// Hyperbolic sine
@@ -1607,7 +1610,7 @@ impl<T> Identity<Multiplication> for Complex<T>
     }
 }
 
-impl<T> Magma<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Magma<Addition> for Complex<T> where T: Real
 {
     fn operate(self, rhs: Self) -> Self
     {
@@ -1615,11 +1618,11 @@ impl<T> Magma<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
     }
 }
 
-impl<T> MagmaAdd for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> MagmaAdd for Complex<T> where T: Real
 {
 }
 
-impl<T> Magma<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Magma<Multiplication> for Complex<T> where T: Real
 {
     fn operate(self, rhs: Self) -> Self
     {
@@ -1628,102 +1631,102 @@ impl<T> Magma<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon =
     }
 }
 
-impl<T> MagmaMul for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> MagmaMul for Complex<T> where T: Real
 {
 }
 
-impl<T> Quasigroup<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Quasigroup<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> Quasigroup<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Quasigroup<Multiplication> for Complex<T> where T: Real
 {
 
 }
 
-impl<T> AbelianGroup<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> AbelianGroup<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> AbelianGroupAdd for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> AbelianGroupAdd for Complex<T> where T: Real
 {
 }
 
-impl<T> AbelianGroup<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> AbelianGroup<Multiplication> for Complex<T> where T: Real
 {
 }
-impl<T> AbelianGroupMul for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
-{
-}
-
-impl<T> Loop<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> AbelianGroupMul for Complex<T> where T: Real
 {
 }
 
-impl<T> Loop<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Loop<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> CommutativeRing for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Loop<Multiplication> for Complex<T> where T: Real
 {
 }
 
-impl<T> Ring for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> CommutativeRing for Complex<T> where T: Real
 {
 }
 
-impl<T> Monoid<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Ring for Complex<T> where T: Real
 {
 }
 
-impl<T> MonoidAdd for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Monoid<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> Monoid<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
-{
-}
-impl<T> MonoidMul for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> MonoidAdd for Complex<T> where T: Real
 {
 }
 
-impl<T> Semigroup<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Monoid<Multiplication> for Complex<T> where T: Real
+{
+}
+impl<T> MonoidMul for Complex<T> where T: Real
 {
 }
 
-impl<T> SemigroupAdd for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Semigroup<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> Semigroup<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> SemigroupAdd for Complex<T> where T: Real
 {
 }
 
-impl<T> SemigroupMul for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Semigroup<Multiplication> for Complex<T> where T: Real
 {
 }
 
-impl<T> Field for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> SemigroupMul for Complex<T> where T: Real
 {
 }
 
-impl<T> Group<Addition> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Field for Complex<T> where T: Real
 {
 }
 
-impl<T> GroupAdd for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Group<Addition> for Complex<T> where T: Real
 {
 }
 
-impl<T> Group<Multiplication> for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> GroupAdd for Complex<T> where T: Real
 {
 }
 
-impl<T> GroupMul for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Group<Multiplication> for Complex<T> where T: Real
 {
 }
 
-impl<T> AbsDiffEq for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> GroupMul for Complex<T> where T: Real
+{
+}
+
+impl<T> AbsDiffEq for Complex<T> where T: Real
 {
     type Epsilon = Self;
 
@@ -1738,7 +1741,7 @@ impl<T> AbsDiffEq for Complex<T> where T: Real + AbsDiffEq<Epsilon = T>
     }
 }
 
-impl<T> RelativeEq for Complex<T> where T: Real + RelativeEq<Epsilon = T>
+impl<T> RelativeEq for Complex<T> where T: Real
 {
     fn default_max_relative() -> Self {
         Complex::new(T::default_max_relative(), T::default_max_relative())

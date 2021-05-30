@@ -14,7 +14,6 @@ use super::{
 /// $`x, y, z \in \mathbb{S}`$
 /// $`x \circ (y \circ z) = (x \circ y) \circ z`$
 pub trait Semigroup<O: Operator + Copy>: Magma<O>
-    //where Self:  AbsDiffEq
 {
     fn is_associative(self: Self, y: Self, z: Self) -> bool
     {

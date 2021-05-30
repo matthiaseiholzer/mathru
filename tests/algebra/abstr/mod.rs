@@ -7,10 +7,11 @@
 //mod field;
 //mod ring;
 //mod semiring;
-// mod identity;
-// mod magma;
+mod identity;
+mod magma;
+mod monoid;
 // mod operator;
-// mod semigroup;
+mod semigroup;
 //
 //mod natural;
 //mod integer;

@@ -45,3 +45,135 @@ pub trait Trigonometry
     // Inverse cosecant function
     fn arccsc(self: Self) -> Self;
 }
+
+macro_rules! trigonometry_impl {
+    ($t:ty, $pi: expr) => {
+        impl Trigonometry for $t
+        {
+            /// Returns the mathematic constant PI
+            fn pi() -> Self
+            {
+                $pi
+            }
+
+            /// Sinus
+            fn sin(self: Self) -> Self
+            {
+                self.sin()
+            }
+
+            /// Cosinus
+            fn cos(self: Self) -> Self
+            {
+                self.cos()
+            }
+
+            ///Tangens
+            fn tan(self: Self) -> Self
+            {
+                self.tan()
+            }
+
+            //
+            fn cot(self: Self) -> Self
+            {
+                1.0 / self.tan()
+            }
+
+            /// Secant
+            ///
+            /// # Panics
+            ///
+            /// self = n pi + pi/2 n \in Z
+            fn sec(self: Self) -> Self
+            {
+                1.0 / self.cos()
+            }
+
+            fn csc(self: Self) -> Self
+            {
+                1.0 / self.sin()
+            }
+
+            /// Inverse sine function
+            ///
+            /// # Arguemnts
+            ///
+            /// -1.0 <= x <= 1.0
+            ///
+            /// # Panics
+            ///
+            /// |x| > 1.0
+            fn arcsin(self: Self) -> Self
+            {
+                if self.abs() > 1.0
+                {
+                    panic!();
+                }
+
+                self.asin()
+            }
+
+            /// Inverse cosine function
+            ///
+            /// # Arguemnts
+            ///
+            /// -1.0 <= x <= 1.0
+            ///
+            /// # Panics
+            ///
+            /// |x| > 1.0
+            fn arccos(self: Self) -> Self
+            {
+                if self.abs() > 1.0
+                {
+                    panic!();
+                }
+
+                self.acos()
+            }
+
+            /// Computes the arctangent of a number
+            fn arctan(self: Self) -> Self
+            {
+                self.atan()
+            }
+
+            /// Computes the arctangent
+            fn arctan2(self: Self, other: Self) -> Self
+            {
+                self.atan2(other)
+            }
+
+            fn arccot(self: Self) -> Self
+            {
+                if self == 0.0
+                {
+                    return 0.0;
+                }
+
+                if self > 0.0
+                {
+                    return (1.0 / self).atan();
+                }
+                else
+                {
+                    return (1.0 / self).atan();
+                }
+            }
+
+            fn arcsec(self: Self) -> Self
+            {
+                (1.0 / self).acos()
+            }
+
+            fn arccsc(self: Self) -> Self
+            {
+                (1.0 / self).asin()
+            }
+        }
+    };
+}
+
+trigonometry_impl!(f32, std::f32::consts::PI);
+trigonometry_impl!(f64, std::f64::consts::PI);

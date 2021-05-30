@@ -1,68 +1,42 @@
-use mathru::algebra::abstr::{Addition, Multiplication, Semigroup};
-
-#[test]
-fn addition_f64()
+macro_rules! test_semigroup
 {
-    let a: f64 = 8.0;
-    let b: f64 = 2.0;
-    let c: f64 = 1.0;
-
-    assert_eq!(true, Semigroup::<Addition>::is_associative(a, b, c));
-}
-
-#[test]
-fn multiplication_f64()
-{
-    let a: f64 = 8.0;
-    let b: f64 = 2.0;
-    let c: f64 = 1.0;
-
-    assert_eq!(true, Semigroup::<Multiplication>::is_associative(a, b, c));
-}
-
-macro_rules! test_magma
-{
-    ($a:expr, $b:expr, $(($id:ident, $s:ty)),*) =>
+    ($a:expr, $b:expr, $c:expr, $(($id:ident, $s:ty)),*) =>
     {
         $(
             mod $id
             {
-                use mathru::algebra::abstr::{Magma, Addition, Multiplication};
+                use mathru::algebra::abstr::{Semigroup, Addition, Multiplication};
 
                 #[test]
-                fn test_magma_addition()
+                fn semigroup_addition()
                 {
-                    let a: $s = $a;
-                    let b: $s = $b;
-
-                    assert_eq!(a + b, Magma::<Addition>::operate(a, b));
+                    assert!(Semigroup::<Addition>::is_associative($a, $b, $c));
                 }
 
                 #[test]
-                fn test_magma_multiplication()
+                fn semigroup_multiplication()
                 {
-                    let a: $s = $a;
-                    let b: $s = $b;
-
-                    assert_eq!(a * b, Magma::<Multiplication>::operate(a, b));
+                    assert!(Semigroup::<Multiplication>::is_associative($a, $b, $c));
                 }
             }
         )*
     };
 }
 
-test_magma!(5,
+test_semigroup!(5,
             2,
+            4,
             (u8, u8),
             (u16, u16),
             (u32, u32),
             (u64, u64),
             (u128, u128));
-test_magma!(-5,
+test_semigroup!(-5,
             2,
+            3,
             (i8, i8),
             (i16, i16),
             (i32, i32),
             (i64, i64),
             (i128, i128));
-test_magma!(5.0, 2.0, (f32, f32), (f64, f64));
+test_semigroup!(5.0, 2.0, 3.0, (f32, f32), (f64, f64));

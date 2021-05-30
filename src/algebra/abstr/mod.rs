@@ -25,7 +25,7 @@ pub use self::{
     scalar::Scalar,
     sign::Sign,
 };
-pub use self::polynomial::Polynomial;
+// pub use self::polynomial::Polynomial;
 #[cfg(feature = "lapack")]
 pub use self::scalar::{Blas, Lapack};
 
@@ -36,7 +36,6 @@ mod scalar;
 mod sign;
 mod semiring;
 mod abeliangroup;
-// mod complex;
 mod group;
 mod identity;
 mod integer;
@@ -46,14 +45,15 @@ mod monoid;
 mod natural;
 mod operator;
 mod quasigroup;
-mod real;
 mod semigroup;
 mod abs_diff_eq;
 mod relative_eq;
+mod bound;
 
-mod polynomial;
+// mod polynomial;
 #[macro_use]
 //pub mod real;
 //pub mod integer;
 //pub mod natural;
-pub mod complex;
+mod real;
+mod complex;

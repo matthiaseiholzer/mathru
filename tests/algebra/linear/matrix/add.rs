@@ -45,7 +45,7 @@ fn add_2()
 }
 
 #[test]
-fn add_3()
+fn add_complex_f32()
 {
     let a: Matrix<Complex<f32>> = matrix![   Complex::from_f32(1.0), Complex::from_f32(-2.0), Complex::from_f32(-3.0);
                                     Complex::from_f32(-4.0), Complex::from_f32(-1.0), Complex::from_f32(-2.5)];
@@ -75,7 +75,7 @@ fn add_5()
 }
 
 #[test]
-fn add_6()
+fn add_complex_f64()
 {
     let a: Matrix<Complex<f64>> = matrix![   Complex::new(1.0, 1.0), Complex::new(-2.0, 2.0) ;
                                     Complex::new(-4.0, 3.0), Complex::new(1.0, -5.0)];

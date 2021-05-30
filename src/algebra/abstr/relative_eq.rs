@@ -157,36 +157,6 @@ macro_rules! impl_relative_eq_float {
 impl_relative_eq_float!(f32, i32);
 impl_relative_eq_float!(f64, i64);
 
-
-macro_rules! impl_relative_eq_integer {
-    ($T:ident) => {
-        impl RelativeEq for $T {
-
-            fn default_max_relative() -> $T {
-                0
-            }
-
-            fn relative_eq(&self, other: &$T, epsilon: $T, _max_relative: $T) -> bool {
-                self.abs_diff_eq(other, epsilon)
-            }
-        }
-    };
-}
-
-impl_relative_eq_integer!(u8);
-impl_relative_eq_integer!(u16);
-impl_relative_eq_integer!(u32);
-impl_relative_eq_integer!(u64);
-impl_relative_eq_integer!(u128);
-impl_relative_eq_integer!(usize);
-
-impl_relative_eq_integer!(i8);
-impl_relative_eq_integer!(i16);
-impl_relative_eq_integer!(i32);
-impl_relative_eq_integer!(i64);
-impl_relative_eq_integer!(i128);
-impl_relative_eq_integer!(isize);
-
 /// Approximate equality using both the absolute difference and relative based comparisons.
 #[macro_export]
 macro_rules! relative_eq {

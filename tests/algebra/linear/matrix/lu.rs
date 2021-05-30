@@ -64,7 +64,24 @@ fn decompose_lu_1()
 }
 
 #[test]
-fn decompose_lu2()
+fn decompose_f32()
+{
+    let a: Matrix<f32> = Matrix::new(2, 2, vec![1.0, 3.0, -2.0, -7.0]);
+
+    let l_ref: Matrix<f32> = matrix![   1.0, 0.0;
+                                        1.0 / 3.0, 1.0];
+
+    let u_ref: Matrix<f32> = matrix![   3.0, -7.0;
+                                        0.0, 1.0/3.0];
+
+    let (l, u, _p): (Matrix<f32>, Matrix<f32>, Matrix<f32>) = a.dec_lu().unwrap().lup();
+
+    assert_relative_eq!(l, l_ref, epsilon=1.0e-5);
+    assert_relative_eq!(u, u_ref, epsilon=1.0e-5);
+}
+
+#[test]
+fn decompose_f64()
 {
     let a: Matrix<f64> = Matrix::new(2, 2, vec![1.0, 3.0, -2.0, -7.0]);
 

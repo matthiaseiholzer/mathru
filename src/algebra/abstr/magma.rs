@@ -3,7 +3,6 @@ use super::operator::{Addition, Multiplication, Operator};
 use std::{
     ops::{Add, AddAssign, Mul, MulAssign},
 };
-use crate::algebra::abstr::{AbsDiffEq, RelativeEq};
 
 
 /// A Magma is a pair $`(\mathbb{M}, \circ)`$, composed by a set $`\mathbb{M}`$
@@ -12,7 +11,7 @@ use crate::algebra::abstr::{AbsDiffEq, RelativeEq};
 /// ```math
 /// \circ: \mathbb{M} \times \mathbb{M} \rightarrow \mathbb{M} ,\\\\ (x, y) \mapsto x \circ y
 /// ```
-pub trait Magma<O: Operator>: Sized + Clone + AbsDiffEq + RelativeEq
+pub trait Magma<O: Operator>: Clone + PartialEq
 {
     /// binary operation
     fn operate(self, rhs: Self) -> Self;

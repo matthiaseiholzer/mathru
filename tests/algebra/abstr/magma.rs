@@ -8,7 +8,7 @@ macro_rules! test_magma
                 use mathru::algebra::abstr::{Magma, Addition, Multiplication};
 
                 #[test]
-                fn test_magma_addition()
+                fn magma_addition()
                 {
                     let a: $s = $a;
                     let b: $s = $b;
@@ -17,7 +17,7 @@ macro_rules! test_magma
                 }
 
                 #[test]
-                fn test_magma_multiplication()
+                fn magma_multiplication()
                 {
                     let a: $s = $a;
                     let b: $s = $b;

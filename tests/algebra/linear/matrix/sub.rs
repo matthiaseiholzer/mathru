@@ -15,7 +15,7 @@ fn sub()
 }
 
 #[test]
-fn sub_1()
+fn sub_f32()
 {
     let a: Matrix<f32> = matrix![   1.0, -2.0, -3.0;
                                     -4.0, -1.0, -2.5];
@@ -30,7 +30,7 @@ fn sub_1()
 }
 
 #[test]
-fn sub_2()
+fn sub_64()
 {
     let a: Matrix<f64> = matrix![   1.0, -2.0, -3.0;
                                     -4.0, -1.0, -2.5];
@@ -45,7 +45,7 @@ fn sub_2()
 }
 
 #[test]
-fn sub_3()
+fn sub_complex_f32()
 {
     let a: Matrix<Complex<f32>> = matrix![   Complex::from_f32(1.0), Complex::from_f32(-2.0), Complex::from_f32(-3.0);
                                     Complex::from_f32(-4.0), Complex::from_f32(-1.0), Complex::from_f32(-2.5)];
@@ -60,7 +60,7 @@ fn sub_3()
 }
 
 #[test]
-fn sub_4()
+fn sub_complex_f64()
 {
     let a: Matrix<Complex<f64>> = matrix![   Complex::new(1.0, 1.0), Complex::new(-2.0, 2.0) ;
                                     Complex::new(-4.0, 3.0), Complex::new(1.0, -5.0)];

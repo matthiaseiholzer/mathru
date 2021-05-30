@@ -163,6 +163,20 @@ fn mul_scalar_complex_f32()
 }
 
 #[test]
+fn mul_scalar_complex_f64()
+{
+    let a: Matrix<Complex<f64>> = matrix![  Complex::new(1.0, 1.0), Complex::new(-2.0, 2.0);
+                                            Complex::new(-4.0, 3.0), Complex::new(1.0, -5.0)];
+
+    let reference: Matrix<Complex<f64>> = matrix![  Complex::new(-4.0, 0.0), Complex::new(0.0, -8.0);
+                                                    Complex::new(2.0, -14.0), Complex::new(8.0, 12.0)];
+
+    let res: Matrix<Complex<f64>> = &a * &Complex::new(-2.0, 2.0);
+
+    assert_relative_eq!(reference, res);
+}
+
+#[test]
 fn matrix_mul_scalar_f32()
 {
     let m: Matrix<f32> = matrix![   1.0, 2.0;
