@@ -525,7 +525,7 @@ impl<T> MulAssign for Polynomial<T>
 }
 
 impl<'a, 'b, T> Div<&'b Polynomial<T>> for &'a Polynomial<T>
-    where T: Field + Scalar
+    where T: Field + Scalar + AbsDiffEq<Epsilon = T>
 {
     type Output = (Polynomial<T>, Polynomial<T>);
 
@@ -603,7 +603,7 @@ impl<T> Polynomial<T>
 }
 
 impl<T> Polynomial<T>
-    where T: Field + Scalar
+    where T: Field + Scalar + AbsDiffEq<Epsilon = T>
 {
     /// Differentiate polynomial
     ///
@@ -761,16 +761,16 @@ impl<T> GroupAdd for Polynomial<T>
 }
 
 impl<T> AbsDiffEq for Polynomial<T>
-    where T: AbsDiffEq + Clone
+    where T: AbsDiffEq<Epsilon = T> + Clone
 {
-    type Epsilon = Polynomial<T>;
+    type Epsilon = T;
 
-    fn default_epsilon() -> Self
+    fn default_epsilon() -> T
     {
-        Polynomial::from_coef(vec![T::default_epsilon()])
+        T::default_epsilon()
     }
 
-    fn abs_diff_eq(&self, other: &Polynomial<T>, epsilon: Polynomial<T>) -> bool
+    fn abs_diff_eq(&self, other: &Polynomial<T>, epsilon: T) -> bool
     {
         for (a, b) in self.coef.iter().zip(other.coef.iter())
         {
@@ -786,12 +786,12 @@ impl<T> AbsDiffEq for Polynomial<T>
 impl<T> RelativeEq for Polynomial<T>
     where T: RelativeEq<Epsilon = T> + Clone
 {
-    fn default_max_relative() -> Self
+    fn default_max_relative() -> T
     {
-        Polynomial::from_coef(T::default_epsilon())
+        T::default_epsilon()
     }
 
-    fn relative_eq(&self, other: &Self, epsilon: Polynomial<T>, max_relative: Polynomial<T>) -> bool
+    fn relative_eq(&self, other: &Self, epsilon: T, max_relative: T) -> bool
     {
         for (a, b) in self.coef.iter().zip(other.coef.iter())
         {

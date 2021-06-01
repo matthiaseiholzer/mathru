@@ -25,7 +25,6 @@ use crate::algebra::abstr::{Blas, Lapack};
 #[derive(Debug, Clone, Copy)]
 // #[repr(C)]
 pub struct Complex<T>
-    where T: Real
 {
     /// Real portion of the complex number
     pub re: T,
@@ -33,7 +32,8 @@ pub struct Complex<T>
     pub im: T,
 }
 
-impl<T> Complex<T> where T: Real
+impl<T> Complex<T>
+    where T: Real
 {
     /// Create a new complex
     pub fn new(re: T, im: T) -> Complex<T>
@@ -1311,7 +1311,7 @@ impl<T> Power for Complex<T>
     /// # Example
     ///
     /// ```
-    /// use mathru::{elementary::Power, num::Complex};
+    /// use mathru::{elementary::Power, abstr::Complex};
     ///
     /// let a: Complex<f64> = Complex::new(1.0_f64, 2.0_f64);
     /// let b: Complex<f64> = Complex::new(-2.0_f64, -1.0_f64);
@@ -1722,11 +1722,19 @@ impl<T> Group<Multiplication> for Complex<T> where T: Real
 {
 }
 
-impl<T> GroupMul for Complex<T> where T: Real
+impl<T> GroupMul for Complex<T>
+    where T: Real
 {
 }
 
-impl<T> AbsDiffEq for Complex<T> where T: Real
+// impl<T> Real for Complex<T>
+//     where T: Real
+// {
+//
+// }
+
+impl<T> AbsDiffEq for Complex<T>
+    where T: Real
 {
     type Epsilon = Self;
 

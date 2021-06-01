@@ -14,8 +14,6 @@ pub use self::{
     quasigroup::Quasigroup,
     relative_eq::{Relative, RelativeEq},
     semigroup::{Semigroup, SemigroupAdd, SemigroupMul},
-};
-pub use self::{
     complex::Complex,
     field::Field,
     integer::Integer,
@@ -24,6 +22,7 @@ pub use self::{
     ring::{CommutativeRing, Ring},
     scalar::Scalar,
     sign::Sign,
+    polynomial::Polynomial,
 };
 // pub use self::polynomial::Polynomial;
 #[cfg(feature = "lapack")]
@@ -50,7 +49,7 @@ mod abs_diff_eq;
 mod relative_eq;
 mod bound;
 
-// mod polynomial;
+mod polynomial;
 #[macro_use]
 //pub mod real;
 //pub mod integer;
