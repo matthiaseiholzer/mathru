@@ -3,6 +3,7 @@ use crate::algebra::abstr::{
     Sign,
 };
 use std::fmt::{Debug, Display};
+use crate::algebra::abstr::Complex;
 
 #[cfg(feature = "lapack")]
 use crate::algebra::abstr::Zero;
@@ -32,17 +33,18 @@ pub trait Scalar<Rhs = Self, Output = Self>:
 }
 
 macro_rules! impl_scalar {
-    ($t:ty, $eps:expr) => {
+    ($t:ty) => {
         impl Scalar for $t
         {
         }
     };
 }
 
-impl_scalar!(/* u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, */ f32,
-             std::f32::EPSILON);
-impl_scalar!(/* u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, */ f64,
-             std::f64::EPSILON);
+impl_scalar!(f32);
+impl_scalar!(f64);
+impl_scalar!(Complex<f32>);
+impl_scalar!(Complex<f64>);
+
 
 #[cfg(feature = "lapack")]
 pub trait Lapack: Sized + Zero

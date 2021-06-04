@@ -1,3 +1,9 @@
+use crate::algebra::abstr::{Complex, Real};
+use crate::elementary::trigonometry::Trigonometry;
+use crate::algebra::abstr::One;
+use crate::elementary::power::Power;
+use crate::elementary::exponential::Exponential;
+
 /// Hyperbolic functions
 ///
 ///<a href="https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions">https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions</a>
@@ -268,3 +274,203 @@ macro_rules! hyperbolic_impl {
 
 hyperbolic_impl!(f32);
 hyperbolic_impl!(f64);
+
+
+#[cfg(feature = "native")]
+impl<T> Hyperbolic for Complex<T>
+    where T: Real
+{
+    /// Hyperbolic sine
+    fn sinh(self: Self) -> Self
+    {
+        Complex::new(T::zero(), -T::one()) * Complex::new(-self.im, self.re).sin()
+    }
+
+    /// Hyperbolic cosine
+    fn cosh(self: Self) -> Self
+    {
+        Complex::new(-self.im, self.re).cos()
+    }
+
+    /// Hyperbolic tangens
+    fn tanh(self: Self) -> Self
+    {
+        self.sinh() / self.cosh()
+    }
+
+    /// Hyperbolic cotangens
+    fn coth(self: Self) -> Self
+    {
+        self.cosh() / self.sinh()
+    }
+
+    /// Hyperbolic secant
+    fn sech(self: Self) -> Self
+    {
+        Complex::new(-self.im, self.re).sec()
+    }
+
+    /// Hyperbolic cosecant
+    fn csch(self: Self) -> Self
+    {
+        Complex::new(T::zero(), -T::one()) * Complex::new(-self.im, self.re).csc()
+    }
+
+    /// Hyperbolic inverse sine
+    ///
+    /// # Arguments
+    ///
+    /// # Panics
+    fn arsinh(self: Self) -> Self
+    {
+        let p: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        (self + (self * self + Complex::one()).pow(p)).ln()
+    }
+
+    /// Hyperbolic inverse cosine
+    ///
+    /// # Argument
+    ///
+    /// # Panics
+    fn arcosh(self: Self) -> Self
+    {
+        let p: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        (self + (self * self - Complex::one()).pow(p)).ln()
+    }
+
+    /// Inverse hyperbolic tangent
+    ///
+    /// # Arguments
+    ///
+    /// # Panics
+    fn artanh(self: Self) -> Self
+    {
+        let f: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        ((Complex::one() + self) / (Complex::one() - self)).ln() * f
+    }
+
+    /// Inverse hyperbolic cosecant
+    ///
+    /// # Arguments
+    ///
+    ///
+    /// # Panics
+    fn arcoth(self: Self) -> Self
+    {
+        let f: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        ((self + Complex::one()) / (self - Complex::one())).ln() * f
+    }
+
+    /// Hyperbolic inverse secant
+    fn arsech(self: Self) -> Self
+    {
+        (Complex::one() / self).arcosh()
+    }
+
+    // Hyperbolic inverse cosecant
+    fn arcsch(self: Self) -> Self
+    {
+        (Complex::one() / self).arsinh()
+    }
+}
+
+
+#[cfg(feature = "lapack")]
+impl<T> Hyperbolic for Complex<T>
+    where T: Real,
+          // Complex<T>: Lapack + Blas
+{
+    /// Hyperbolic sine
+    fn sinh(self: Self) -> Self
+    {
+        Complex::new(T::zero(), -T::one()) * Complex::new(-self.im, self.re).sin()
+    }
+
+    /// Hyperbolic cosine
+    fn cosh(self: Self) -> Self
+    {
+        Complex::new(-self.im, self.re).cos()
+    }
+
+    /// Hyperbolic tangens
+    fn tanh(self: Self) -> Self
+    {
+        self.sinh() / self.cosh()
+    }
+
+    /// Hyperbolic cotangens
+    fn coth(self: Self) -> Self
+    {
+        self.cosh() / self.sinh()
+    }
+
+    /// Hyperbolic secant
+    fn sech(self: Self) -> Self
+    {
+        Complex::new(-self.im, self.re).sec()
+    }
+
+    /// Hyperbolic cosecant
+    fn csch(self: Self) -> Self
+    {
+        Complex::new(T::zero(), -T::one()) * Complex::new(-self.im, self.re).csc()
+    }
+
+    /// Hyperbolic inverse sine
+    ///
+    /// # Arguments
+    ///
+    /// # Panics
+    fn arsinh(self: Self) -> Self
+    {
+        let p: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        (self + (self * self + Complex::one()).pow(p)).ln()
+    }
+
+    /// Hyperbolic inverse cosine
+    ///
+    /// # Argument
+    ///
+    /// # Panics
+    fn arcosh(self: Self) -> Self
+    {
+        let p: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        (self + (self * self - Complex::one()).pow(p)).ln()
+    }
+
+    /// Inverse hyperbolic tangent
+    ///
+    /// # Arguments
+    ///
+    /// # Panics
+    fn artanh(self: Self) -> Self
+    {
+        let f: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        ((Complex::one() + self) / (Complex::one() - self)).ln() * f
+    }
+
+    /// Inverse hyperbolic cosecant
+    ///
+    /// # Arguments
+    ///
+    ///
+    /// # Panics
+    fn arcoth(self: Self) -> Self
+    {
+        let f: Complex<T> = Complex::new(T::one() / (T::one() + T::one()), T::zero());
+        ((self + Complex::one()) / (self - Complex::one())).ln() * f
+    }
+
+    /// Hyperbolic inverse secant
+    fn arsech(self: Self) -> Self
+    {
+        (Complex::one() / self).arcosh()
+    }
+
+    // Hyperbolic inverse cosecant
+    fn arcsch(self: Self) -> Self
+    {
+        (Complex::one() / self).arsinh()
+    }
+}
+

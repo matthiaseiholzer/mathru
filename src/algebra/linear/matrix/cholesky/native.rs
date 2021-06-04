@@ -4,7 +4,7 @@ use crate::{
     },
     elementary::Power,
 };
-use crate::algebra::abstr::{Complex, Real, AbsDiffEq};
+use crate::algebra::abstr::{Complex, Real, Scalar};
 use crate::algebra::abstr::Zero;
 
 impl<T> Matrix<T> where T: Real
@@ -68,7 +68,7 @@ impl<T> Matrix<T> where T: Real
     }
 }
 
-impl<T> Matrix<Complex<T>> where T: Real + AbsDiffEq<Epsilon = T>
+impl<T> Matrix<Complex<T>> where T: Real, Complex<T>: Scalar
 {
     /// Decomposes the symetric, positive definite quadractic matrix A into a
     /// lower triangular matrix L A = L L^T

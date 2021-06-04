@@ -166,7 +166,7 @@ macro_rules! lapack_complex (
     ($T: ty, $xgehrd: path, $xorghr: path, $xgeev: path, $xgetrf: path, $xgeqrf: path, $xorgqr: path, $xgetri: path, $xpotrf: path,
     $xgetrs: path)
     => (
-		impl Lapack for $T
+		impl Lapack for Complex<$T>
 		{
 			fn xgehrd(_n: i32,
 					  _ilo: i32,
@@ -372,7 +372,7 @@ macro_rules! lapack_complex (
 	)
 );
 
-lapack_complex!(Complex<f32>,
+lapack_complex!(f32,
              ffi::cgehrd_,
              ffi::corghr_,
              ffi::cgeev_,
@@ -383,7 +383,7 @@ lapack_complex!(Complex<f32>,
              ffi::cpotrf_,
              ffi::cgetrs_);
 
-lapack_complex!(Complex<f64>,
+lapack_complex!(f64,
              ffi::zgehrd_,
              ffi::zorghr_,
              ffi::zgeev_,

@@ -1,4 +1,6 @@
 use mathru::algebra::linear::Matrix;
+
+#[cfg(feature = "native")]
 use mathru::algebra::abstr::Complex;
 
 #[cfg(feature = "native")]
@@ -9,9 +11,9 @@ fn dec_f64()
                                     1.0, 0.0, -7.0;
                                     3.0, 8.0, 9.0];
 
-    let h_ref: Matrix<f64> = matrix![1.0, -4.427188724235731, 3.7947331922020537;
-                                    -3.162277660168379, 8.4, -5.2;
-                                    0.0, 9.8, 0.6];
+    let h_ref: Matrix<f64> = matrix![   1.0, -4.427188724235731, 3.7947331922020537;
+                                        -3.162277660168379, 8.4, -5.2;
+                                        0.0, 9.8, 0.6];
 
     let q_ref: Matrix<f64> = matrix![   1.0, 0.0, 0.0;
                                         0.0, -0.316227766016838, 0.9486832980505137;

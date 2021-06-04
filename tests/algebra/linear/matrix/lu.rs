@@ -175,8 +175,6 @@ fn solve_0()
     assert_relative_eq!(x, x_ref, epsilon=10e-10);
 }
 
-
-
 #[test]
 fn inv_0()
 {
