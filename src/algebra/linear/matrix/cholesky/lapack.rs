@@ -2,11 +2,12 @@ use crate::{
     algebra::{
         abstr::{Field, Scalar},
         linear::{matrix::CholeskyDec, Matrix},
-    },
-    elementary::Power,
+    }
 };
+use crate::algebra::linear::matrix::cholesky::choleskydec::CholeskyDecomp;
 
-impl<T> Matrix<T> where T: Field + Scalar + Power
+impl<T> CholeskyDecomp<T> for Matrix<T>
+    where T: Field + Scalar
 {
     /// Decomposes the symetric, positive definite quadractic matrix A into a
     /// lower triangular matrix L A = L L^T
@@ -27,6 +28,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
     /// # fn main()
     /// # {
     /// use mathru::algebra::linear::Matrix;
+    /// use mathru::algebra::linear::matrix::cholesky::choleskydec::CholeskyDecomp;
     ///
     /// let a: Matrix<f64> = matrix![   2.0, -1.0, 0.0;
     ///                                -1.0, 2.0, -1.0;
@@ -35,7 +37,7 @@ impl<T> Matrix<T> where T: Field + Scalar + Power
     /// let l: (Matrix<f64>) = a.dec_cholesky().unwrap().l();
     /// # }
     /// ```
-    pub fn dec_cholesky(self: &Self) -> Result<CholeskyDec<T>, ()>
+    fn dec_cholesky(self: &Self) -> Result<CholeskyDec<T>, ()>
     {
         let (m, n): (usize, usize) = self.dim();
         assert_eq!(m, n);

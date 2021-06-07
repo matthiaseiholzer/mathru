@@ -163,76 +163,60 @@ lapack_real!(f64,
 
 
 macro_rules! lapack_complex (
-    ($T: ty, $xgehrd: path, $xorghr: path, $xgeev: path, $xgetrf: path, $xgeqrf: path, $xorgqr: path, $xgetri: path, $xpotrf: path,
-    $xgetrs: path)
+    ($T: ty, $xgehrd: path, $xorghr: path, $xgeev: path, $xgetrf: path, $xgeqrf: path, $xorgqr: path, $xgetri: path, $xpotrf: path, $xgetrs: path)
     => (
 		impl Lapack for Complex<$T>
 		{
-			fn xgehrd(_n: i32,
-					  _ilo: i32,
-					  _ihi: i32,
-					  _a: &mut [Self],
-					  _lda: i32,
-					  _tau: &mut [Self],
-					  _work: &mut [Self],
-					  _lwork: i32,
-					  _info: &mut i32)
-			{
-				unimplemented!();
+			//Hessenberg
+       		fn xgehrd(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32, tau: &mut [Self], work: &mut [Self], lwork: i32, info: &mut i32)
+           	{
+                unsafe { $xgehrd(&n, &ilo, &ihi, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _) }
 			}
 
-			fn xgehrd_work_size(_n: i32,
-								_ilo: i32,
-								_ihi: i32,
-								_a: &mut [Self],
-								_lda: i32,
-								_tau: &mut [Self],
-								_info: &mut i32)
-								-> i32
-			{
-				unimplemented!();
-			}
+            fn xgehrd_work_size(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32, tau: &mut [Self], info: &mut i32) -> i32
+            {
+                let mut work = [Self::zero()];
+                let lwork = -1 as i32;
 
-			fn xorghr(_n: i32,
-					  _ilo: i32,
-					  _ihi: i32,
-					  _a: &mut [Self],
-					  _lda: i32,
-					  _tau: &[Self],
-					  _work: &mut [Self],
-					  _lwork: i32,
-					  _info: &mut i32)
-			{
-				unimplemented!();
-			}
+                unsafe { $xgehrd(&n, &ilo, &ihi, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _) };
 
-			fn xorghr_work_size(_n: i32,
-								_ilo: i32,
-								_ihi: i32,
-								_a: &mut [Self],
-								_lda: i32,
-								_tau: &[Self],
-								_info: &mut i32)
-								-> i32
-			{
-				unimplemented!();
-			}
+                work[0].re as i32
+            }
 
-			fn xgeev(_jobvl: u8,
-					 _jobvr: u8,
-					 _n: i32,
-					 _a: &mut [Self],
-					 _lda: i32,
-					 _w: &mut [Self],
-					 _vl: &mut [Self],
-					 _ldvl: i32,
-					 _vr: &mut [Self],
-					 _ldvr: i32,
-					 _work: &mut [Self],
-					 _lwork: i32,
-					 _info: &mut i32)
+
+			fn xorghr(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32, tau: &[Self], work: &mut [Self], lwork: i32, info: &mut i32)
+          	{
+                unsafe { $xorghr(&n, &ilo, &ihi, a.as_mut_ptr() as *mut _, &lda, tau.as_ptr() as *const _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _) }
+            }
+
+            fn xorghr_work_size(n: i32, ilo: i32, ihi: i32, a: &mut [Self], lda: i32, tau: &[Self], info: &mut i32) -> i32 {
+                let mut work = [Self::zero() ];
+                let lwork = -1 as i32;
+
+                unsafe { $xorghr(&n, &ilo, &ihi, a.as_mut_ptr() as *mut _, &lda, tau.as_ptr() as *const _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _) };
+
+                work[0].re as i32
+            }
+
+			fn xgeev(jobvl: u8,
+					 jobvr: u8,
+					 n: i32,
+					 a: &mut [Self],
+					 lda: i32,
+					 w: &mut [Self],
+					 vl: &mut [Self],
+					 ldvl: i32,
+					 vr: &mut [Self],
+					 ldvr: i32,
+					 work: &mut [Self],
+					 lwork: i32,
+					 info: &mut i32)
 			{
-				unimplemented!();
+				let mut rwork: Vec<$T> = Vec::with_capacity(2*n as usize);
+				unsafe
+				{
+					$xgeev(&(jobvl as c_char), &(jobvr as c_char), &n, a.as_mut_ptr() as *mut _, &lda, w.as_mut_ptr() as *mut _, vl.as_mut_ptr() as *mut _, &ldvl, vr.as_mut_ptr() as *mut _, &ldvr, work.as_mut_ptr() as *mut _, &lwork, rwork.as_mut_ptr() as *mut _, info as *mut _)
+				};
 			}
 
 			fn xgeev_work_size(jobvl: u8,
@@ -374,7 +358,7 @@ macro_rules! lapack_complex (
 
 lapack_complex!(f32,
              ffi::cgehrd_,
-             ffi::corghr_,
+             ffi::cunghr_,
              ffi::cgeev_,
              ffi::cgetrf_,
              ffi::cgeqrf_,
@@ -385,7 +369,7 @@ lapack_complex!(f32,
 
 lapack_complex!(f64,
              ffi::zgehrd_,
-             ffi::zorghr_,
+             ffi::zunghr_,
              ffi::zgeev_,
              ffi::zgetrf_,
              ffi::zgeqrf_,

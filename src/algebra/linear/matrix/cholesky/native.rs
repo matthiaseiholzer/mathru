@@ -6,8 +6,10 @@ use crate::{
 };
 use crate::algebra::abstr::{Complex, Real, Scalar};
 use crate::algebra::abstr::Zero;
+use crate::algebra::linear::matrix::cholesky::choleskydec::CholeskyDecomp;
 
-impl<T> Matrix<T> where T: Real
+impl<T> CholeskyDecomp<T> for Matrix<T>
+    where T: Real
 {
     /// Decomposes the symetric, positive definite quadractic matrix A into a
     /// lower triangular matrix L A = L L^T
@@ -28,6 +30,7 @@ impl<T> Matrix<T> where T: Real
     /// # fn main()
     /// # {
     /// use mathru::algebra::linear::Matrix;
+    /// use mathru::algebra::linear::matrix::CholeskyDecomp;
     ///
     /// let a: Matrix<f64> = matrix![   2.0, -1.0, 0.0;
     ///                                -1.0, 2.0, -1.0;
@@ -36,7 +39,7 @@ impl<T> Matrix<T> where T: Real
     /// let l: (Matrix<f64>) = a.dec_cholesky().unwrap().l();
     /// # }
     /// ```
-    pub fn dec_cholesky(self: &Self) -> Result<CholeskyDec<T>, ()>
+    fn dec_cholesky(self: &Self) -> Result<CholeskyDec<T>, ()>
     {
         let (m, n): (usize, usize) = self.dim();
         assert_eq!(m, n);
@@ -68,7 +71,8 @@ impl<T> Matrix<T> where T: Real
     }
 }
 
-impl<T> Matrix<Complex<T>> where T: Real, Complex<T>: Scalar
+impl<T> CholeskyDecomp<Complex<T>> for Matrix<Complex<T>>
+    where T: Real, Complex<T>: Scalar
 {
     /// Decomposes the symetric, positive definite quadractic matrix A into a
     /// lower triangular matrix L A = L L^T
@@ -89,6 +93,7 @@ impl<T> Matrix<Complex<T>> where T: Real, Complex<T>: Scalar
     /// # fn main()
     /// # {
     /// use mathru::algebra::linear::Matrix;
+    /// use mathru::algebra::linear::matrix::CholeskyDecomp;
     ///
     /// let a: Matrix<f64> = matrix![   2.0, -1.0, 0.0;
     ///                                -1.0, 2.0, -1.0;
@@ -97,7 +102,7 @@ impl<T> Matrix<Complex<T>> where T: Real, Complex<T>: Scalar
     /// let l: (Matrix<f64>) = a.dec_cholesky().unwrap().l();
     /// # }
     /// ```
-    pub fn dec_cholesky(self: &Self) -> Result<CholeskyDec<Complex<T>>, ()>
+    fn dec_cholesky(self: &Self) -> Result<CholeskyDec<Complex<T>>, ()>
     {
         let (m, n): (usize, usize) = self.dim();
         assert_eq!(m, n);

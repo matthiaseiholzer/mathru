@@ -28,7 +28,7 @@ mod mul;
 mod sub;
 
 mod cholesky;
-pub use self::cholesky::CholeskyDec;
+pub use self::cholesky::{CholeskyDecomp, CholeskyDec};
 
 mod solve;
 mod substitute;

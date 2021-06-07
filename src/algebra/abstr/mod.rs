@@ -24,7 +24,6 @@ pub use self::{
     sign::Sign,
     polynomial::Polynomial,
 };
-// pub use self::polynomial::Polynomial;
 #[cfg(feature = "lapack")]
 pub use self::scalar::{Blas, Lapack};
 
@@ -51,7 +50,6 @@ mod bound;
 
 mod polynomial;
 #[macro_use]
-//pub mod real;
 //pub mod integer;
 //pub mod natural;
 mod real;

@@ -3,7 +3,8 @@ use crate::algebra::{
     linear::{matrix::LUDec, Matrix},
 };
 
-impl<T> Matrix<T> where T: Field + Scalar
+impl<T> Matrix<T> where
+    T: Field + Scalar
 {
     /// Decomposes the matrix into a upper and a lower matrix
     ///

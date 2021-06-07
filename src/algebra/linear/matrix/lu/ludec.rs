@@ -65,7 +65,8 @@ impl<T> Solve<Vector<T>> for LUDec<T> where T: Field + Scalar
 }
 
 // TODO
-impl<T> Inverse<T> for LUDec<T> where T: Field + Scalar
+impl<T> Inverse<T> for LUDec<T>
+    where T: Field + Scalar
 {
     /// Inverse Matrix
     ///
@@ -91,7 +92,8 @@ impl<T> Inverse<T> for LUDec<T> where T: Field + Scalar
 }
 
 // TODO
-impl<T> Solve<Matrix<T>> for LUDec<T> where T: Field + Scalar
+impl<T> Solve<Matrix<T>> for LUDec<T>
+    where T: Field + Scalar
 {
     fn solve(self: &Self, rhs: &Matrix<T>) -> Result<Matrix<T>, ()>
     {

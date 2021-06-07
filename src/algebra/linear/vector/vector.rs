@@ -733,33 +733,6 @@ impl<T> Sign for Vector<T> where T: Field + Scalar
     }
 }
 
-impl<T> Vector<T>
-    where T: Field + Scalar
-{
-    pub fn compare_neighbourhood(self: &Self, b: &Self, epsilon: T) -> bool
-    {
-        let (self_m, self_n): (usize, usize) = self.dim();
-        let (b_m, b_n): (usize, usize) = b.dim();
-
-        if self_m != b_m || self_n != b_n
-        {
-            println!("dimension mismatch");
-            return false;
-        }
-
-        for i in 0..self_m
-        {
-            if (*self.get(i) - *b.get(i)).abs() > epsilon
-            {
-                println!("a: {}, b: {} a-b: {}", self, b, self - b);
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
 impl<T> AbsDiffEq for Vector<T>
     where T: Field + Scalar + AbsDiffEq<Epsilon = T>
 {
