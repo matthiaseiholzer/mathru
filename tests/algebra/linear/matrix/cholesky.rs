@@ -1,7 +1,6 @@
 use mathru::algebra::linear::Matrix;
 use mathru::algebra::abstr::Complex;
 use crate::mathru::algebra::abstr::Zero;
-use crate::mathru::algebra::linear::matrix::CholeskyDecomp;
 
 #[test]
 fn cholesky_f32()

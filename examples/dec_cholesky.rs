@@ -1,5 +1,4 @@
 use mathru::{algebra::linear::Matrix, matrix};
-use mathru::algebra::linear::matrix::CholeskyDecomp;
 
 fn main()
 {

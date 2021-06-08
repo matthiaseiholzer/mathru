@@ -5,4 +5,3 @@ pub mod native;
 
 mod choleskydec;
 pub use self::choleskydec::CholeskyDec;
-pub use self::choleskydec::CholeskyDecomp;

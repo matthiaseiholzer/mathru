@@ -29,10 +29,3 @@ impl<T> CholeskyDec<T>
         return self.l;
     }
 }
-
-
-pub trait CholeskyDecomp<T>
-{
-
-    fn dec_cholesky(self: &Self) -> Result<CholeskyDec<T>, ()>;
-}

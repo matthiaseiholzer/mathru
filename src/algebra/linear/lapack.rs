@@ -251,52 +251,43 @@ macro_rules! lapack_complex (
 				}
 			}
 
-			fn xgeqrf(_m: i32,
-					  _n: i32,
-					  _a: &mut [Self],
-					  _lda: i32,
-					  _tau: &mut [Self],
-					  _work: &mut [Self],
-					  _lwork: i32,
-					  _info: &mut i32)
+			fn xgeqrf(m: i32, n: i32, a: &mut [Self], lda: i32, tau: &mut [Self], work: &mut [Self], lwork: i32, info: &mut i32)
 			{
-				unimplemented!();
+				unsafe
+				{
+					$xgeqrf(&m, &n, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _)
+				};
 			}
 
-			fn xgeqrf_work_size(_m: i32,
-								_n: i32,
-								_a: &mut [Self],
-								_lda: i32,
-								_tau: &mut [Self],
-								_info: &mut i32)
-								-> i32
+  			fn xgeqrf_work_size(m: i32, n: i32, a: &mut [Self], lda: i32, tau: &mut [Self], info: &mut i32) -> i32
 			{
-				unimplemented!();
+				let mut work = [Self::zero() ];
+                let lwork = -1 as i32;
+
+                unsafe {
+                	$xgeqrf(&m, &n, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _)
+				};
+                work[0].re as i32
 			}
 
-			fn xorgqr(_m: i32,
-					  _n: i32,
-					  _k: i32,
-					  _a: &mut [Self],
-					  _lda: i32,
-					  _tau: &mut [Self],
-					  _work: &mut [Self],
-					  _lwork: i32,
-					  _info: &mut i32)
+			fn xorgqr(m: i32, n: i32, k: i32, a: &mut [Self], lda: i32, tau: &mut [Self], work: &mut [Self], lwork: i32, info: &mut i32)
 			{
-				unimplemented!();
+				unsafe
+				{
+					$xorgqr(&m, &n, &k, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _)
+				};
 			}
 
-			fn xorgqr_work_size(_m: i32,
-								_n: i32,
-								_k: i32,
-								_a: &mut [Self],
-								_lda: i32,
-								_tau: &mut [Self],
-								_info: &mut i32)
-								-> i32
+  			fn xorgqr_work_size(m: i32, n: i32, k: i32, a: &mut [Self], lda: i32, tau: &mut [Self], info: &mut i32) -> i32
 			{
-				unimplemented!();
+				let mut work = [Self::zero()];
+                let lwork = -1 as i32;
+
+                unsafe
+                {
+                	$xorgqr(&m, &n, &k, a.as_mut_ptr() as *mut _, &lda, tau.as_mut_ptr() as *mut _, work.as_mut_ptr() as *mut _, &lwork, info as *mut _)
+				};
+                work[0].re as i32
 			}
 
 			fn xgetri(n: i32,
@@ -362,7 +353,7 @@ lapack_complex!(f32,
              ffi::cgeev_,
              ffi::cgetrf_,
              ffi::cgeqrf_,
-             ffi::corgqr_,
+             ffi::cungqr_,
              ffi::cgetri_,
              ffi::cpotrf_,
              ffi::cgetrs_);
@@ -373,7 +364,7 @@ lapack_complex!(f64,
              ffi::zgeev_,
              ffi::zgetrf_,
              ffi::zgeqrf_,
-             ffi::zorgqr_,
+             ffi::zungqr_,
              ffi::zgetri_,
              ffi::zpotrf_,
              ffi::zgetrs_);

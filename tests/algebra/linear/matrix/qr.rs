@@ -1,8 +1,9 @@
 use mathru::{algebra::linear::Matrix};
+use mathru::algebra::abstr::Complex;
 
 #[cfg(feature = "native")]
 #[test]
-fn decompose_f32()
+fn dec_f32()
 {
     let a: Matrix<f32> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;
@@ -24,7 +25,7 @@ fn decompose_f32()
 
 #[cfg(feature = "native")]
 #[test]
-fn decompose_f64()
+fn dec_f64()
 {
     let a: Matrix<f64> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;
@@ -44,9 +45,53 @@ fn decompose_f64()
     assert_relative_eq!(r, r_ref, epsilon=1.0e-10, max_relative=1.0e-10);
 }
 
+#[cfg(feature = "native")]
+#[test]
+fn dec_complex_f32()
+{
+    let a: Matrix<Complex<f32>> = matrix![  Complex::new(6.0, 0.0), Complex::new(5.0, 0.0), Complex::new(0.0, 0.0);
+                                            Complex::new(5.0, 0.0), Complex::new(1.0, 0.0), Complex::new(4.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(4.0, 0.0), Complex::new(3.0, 0.0)];
+
+    let (q, r): (Matrix<Complex<f32>>, Matrix<Complex<f32>>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<Complex<f32>> = matrix![  Complex::new(7.682212795973757e-01, 0.0), Complex::new(3.326541793600714e-01, 0.0), Complex::new(5.469709887444194e-01, 0.0);
+                                                Complex::new(6.401843996644797e-01, 0.0), Complex::new(-3.991850152320858e-01, 0.0), Complex::new(-6.563651864933034e-01, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(8.543959975142890e-01, 0.0), Complex::new(-5.196224393071984e-01, 0.0)];
+
+    let r_ref: Matrix<Complex<f32>> = matrix![  Complex::new(7.810249675906654, 0.0), Complex::new(4.48129079765136, 0.0), Complex::new(2.5607375986579197, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(4.681669871625427, 0.0), Complex::new(0.9664479316145234, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0), Complex::new(-4.184328063894809, 0.0)];
+
+    assert_relative_eq!(q, q_ref, epsilon=Complex::new(1.0e-5, 1.0e-5));
+    assert_relative_eq!(r, r_ref, epsilon=Complex::new(1.0e-5, 1.0e-5));
+}
+
+#[cfg(feature = "native")]
+#[test]
+fn dec_complex_f64()
+{
+    let a: Matrix<Complex<f64>> = matrix![  Complex::new(6.0, 0.0), Complex::new(5.0, 0.0), Complex::new(0.0, 0.0);
+                                            Complex::new(5.0, 0.0), Complex::new(1.0, 0.0), Complex::new(4.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(4.0, 0.0), Complex::new(3.0, 0.0)];
+
+    let (q, r): (Matrix<Complex<f64>>, Matrix<Complex<f64>>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<Complex<f64>> = matrix![  Complex::new(7.682212795973757e-01, 0.0), Complex::new(3.326541793600714e-01, 0.0), Complex::new(5.469709887444194e-01, 0.0);
+                                                Complex::new(6.401843996644797e-01, 0.0), Complex::new(-3.991850152320858e-01, 0.0), Complex::new(-6.563651864933034e-01, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(8.543959975142890e-01, 0.0), Complex::new(-5.196224393071984e-01, 0.0)];
+
+    let r_ref: Matrix<Complex<f64>> = matrix![  Complex::new(7.810249675906654, 0.0), Complex::new(4.48129079765136, 0.0), Complex::new(2.5607375986579197, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(4.681669871625427, 0.0), Complex::new(0.9664479316145234, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0), Complex::new(-4.184328063894809, 0.0)];
+
+    assert_relative_eq!(q, q_ref, epsilon=Complex::new(1.0e-10, 1.0e-10));
+    assert_relative_eq!(r, r_ref, epsilon=Complex::new(1.0e-10, 1.0e-10));
+}
+
 #[cfg(feature = "lapack")]
 #[test]
-fn decompose_f32()
+fn dec_f32()
 {
     let a: Matrix<f32> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;
@@ -68,7 +113,7 @@ fn decompose_f32()
 
 #[cfg(feature = "lapack")]
 #[test]
-fn decompose_f64()
+fn dec_f64()
 {
     let a: Matrix<f64> = matrix![   6.0, 5.0, 0.0;
                                     5.0, 1.0, 4.0;
@@ -86,6 +131,50 @@ fn decompose_f64()
 
     assert_relative_eq!(q, q_ref, epsilon=1.0e-10, max_relative=1.0e-10);
     assert_relative_eq!(r, r_ref, epsilon=1.0e-10, max_relative=1.0e-10);
+}
+
+#[cfg(feature = "lapack")]
+#[test]
+fn dec_complex_f32()
+{
+    let a: Matrix<Complex<f32>> = matrix![  Complex::new(6.0, 0.0), Complex::new(5.0, 0.0), Complex::new(0.0, 0.0);
+                                            Complex::new(5.0, 0.0), Complex::new(1.0, 0.0), Complex::new(4.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(4.0, 0.0), Complex::new(3.0, 0.0)];
+
+    let (q, r): (Matrix<Complex<f32>>, Matrix<Complex<f32>>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<Complex<f32>> = matrix![  Complex::new(-7.682212795973757e-01, 0.0), Complex::new(3.326541793600714e-01, 0.0), Complex::new(-5.469709887444194e-01, 0.0);
+                                                Complex::new(-6.401843996644797e-01, 0.0), Complex::new(-3.991850152320858e-01, 0.0), Complex::new(6.563651864933034e-01, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(8.543959975142890e-01, 0.0), Complex::new(5.196224393071984e-01, 0.0)];
+
+    let r_ref: Matrix<Complex<f32>> = matrix![  Complex::new(-7.810249675906654, 0.0), Complex::new(-4.48129079765136, 0.0), Complex::new(-2.5607375986579197, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(4.681669871625427, 0.0), Complex::new(0.9664479316145234, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0), Complex::new(4.184328063894809, 0.0)];
+
+    assert_relative_eq!(q, q_ref, epsilon=Complex::new(1.0e-5, 1.0e-5));
+    assert_relative_eq!(r, r_ref, epsilon=Complex::new(1.0e-5, 1.0e-5));
+}
+
+#[cfg(feature = "lapack")]
+#[test]
+fn dec_complex_f64()
+{
+    let a: Matrix<Complex<f64>> = matrix![  Complex::new(6.0, 0.0), Complex::new(5.0, 0.0), Complex::new(0.0, 0.0);
+                                            Complex::new(5.0, 0.0), Complex::new(1.0, 0.0), Complex::new(4.0, 0.0);
+                                            Complex::new(0.0, 0.0), Complex::new(4.0, 0.0), Complex::new(3.0, 0.0)];
+
+    let (q, r): (Matrix<Complex<f64>>, Matrix<Complex<f64>>) = a.dec_qr().qr();
+
+    let q_ref: Matrix<Complex<f64>> = matrix![  Complex::new(-7.682212795973757e-01, 0.0), Complex::new(3.326541793600714e-01, 0.0), Complex::new(-5.469709887444194e-01, 0.0);
+                                                Complex::new(-6.401843996644797e-01, 0.0), Complex::new(-3.991850152320858e-01, 0.0), Complex::new(6.563651864933034e-01, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(8.543959975142890e-01, 0.0), Complex::new(5.196224393071984e-01, 0.0)];
+
+    let r_ref: Matrix<Complex<f64>> = matrix![  Complex::new(-7.810249675906654, 0.0), Complex::new(-4.48129079765136, 0.0), Complex::new(-2.5607375986579197, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(4.681669871625427, 0.0), Complex::new(0.9664479316145234, 0.0);
+                                                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0), Complex::new(4.184328063894809, 0.0)];
+
+    assert_relative_eq!(q, q_ref, epsilon=Complex::new(1.0e-10, 1.0e-10));
+    assert_relative_eq!(r, r_ref, epsilon=Complex::new(1.0e-10, 1.0e-10));
 }
 
 #[cfg(feature = "native")]
@@ -182,49 +271,3 @@ fn decompose_qr2()
     assert_relative_eq!(r, r_ref, epsilon=1.0e-10);
     assert_relative_eq!(a, &q * &r, epsilon=1.0e-10);
 }
-
-// #[test]
-// fn decompose_complex_f32()
-// {
-//     let a: Matrix<Complex<f32>> = matrix![  Complex::new(1.0, 1.0), Complex::new(2.0, 2.0);
-//                                             Complex::new(3.0, 3.0), Complex::new(-4.0, 4.0)];
-//
-//
-//     let q_ref: Matrix<Complex<f32>> = matrix![  Complex::new(-0.2236, -0.2236), Complex::new(0.9303, -0.1861);
-//                                                 Complex::new(-0.6708, -0.6708), Complex::new(-0.3101, 0.0620)];
-//
-//     let r_ref: Matrix<Complex<f32>>  = matrix![ Complex::new(-4.4721, 0.0), Complex::new(5.3666 , 0.8944);
-//                                                 Complex::zero(), Complex::new(3.2249, 0.0)];
-//
-//     let (q, r): (Matrix<Complex<f32>>, Matrix<Complex<f32>>) = a.dec_qr().qr();
-//
-//     assert_relative_eq!(q, q_ref);
-//     // assert_relative_eq!(r, r_ref);
-//     // assert_relative_eq!(p, p_ref);
-//     //
-//     assert_relative_eq!(a, &q * &r, epsilon=Complex::new(1.0e-6, 1.0e-6));
-// }
-
-// #[test]
-// fn decompose_complex_f64()
-// {
-//     let a: Matrix<Complex<f64>> = matrix![  Complex::new(1.0, 1.0), Complex::new(2.0, 2.0);
-//                                             Complex::new(3.0, 3.0), Complex::new(-4.0, 4.0)];
-//
-//     let l_ref: Matrix<Complex<f64>> = matrix![  Complex::new(1.0, 0.0), Complex::zero();
-//                                                 Complex::new(1.0/3.0, 0.0), Complex::new(1.0000, 0.0)];
-//
-//     let u_ref: Matrix<Complex<f64>>  = matrix![ Complex::new(3.0, 3.0), Complex::new(-4.0, 4.0);
-//                                                 Complex::zero(), Complex::new(10.0 / 3.0, 2.0 / 3.0)];
-//
-//     let p_ref: Matrix<Complex<f64>> = matrix![  Complex::zero(), Complex::new(1.0, 0.0);
-//                                                 Complex::new(1.0, 0.0), Complex::zero()];
-//
-//     let (l, u, p): (Matrix<Complex<f64>>, Matrix<Complex<f64>>, Matrix<Complex<f64>>) = a.dec_lu().unwrap().lup();
-//
-//     assert_relative_eq!(l, l_ref);
-//     assert_relative_eq!(u, u_ref);
-//     assert_relative_eq!(p, p_ref);
-//
-//     assert_relative_eq!(p * l * u, a);
-// }
